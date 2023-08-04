@@ -27,11 +27,49 @@ type Room {
   type: ID!
 }
 
+type User {
+  """Unique identifier of the user"""
+  _id: ID!
+
+  """Name of the user"""
+  name: String!
+
+  """Email of the user"""
+  email: String!
+
+  """Phone number of the user"""
+  phone: String!
+}
+
+type Customer {
+  """Example field (placeholder)"""
+  _id: ID!
+
+  """Name of the customer"""
+  name: String!
+
+  """Phone Number of the customer"""
+  phone: String!
+
+  """NID of the customer"""
+  nid: Float
+
+  """Address of the customer"""
+  address: String
+
+  """Hotel where the customer visited"""
+  hotel: ID!
+}
+
 type Query {
   hotels: [Hotel!]!
   hotel(id: Int!): Hotel!
   rooms: [Room!]!
   room(id: Int!): Room!
+  users: [User!]!
+  user(id: Int!): User!
+  customers: [Customer!]!
+  customer(id: Int!): Customer!
 }
 
 type Mutation {
@@ -41,6 +79,12 @@ type Mutation {
   createRoom(createRoomInput: CreateRoomInput!): Room!
   updateRoom(updateRoomInput: UpdateRoomInput!): Room!
   removeRoom(id: Int!): Room!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
+  updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
+  removeCustomer(id: Int!): Customer!
 }
 
 input CreateHotelInput {
@@ -80,5 +124,63 @@ input UpdateRoomInput {
 
   """Type of the room"""
   type: ID
+  id: Int!
+}
+
+input CreateUserInput {
+  """Name of the user"""
+  name: String!
+
+  """Email of the user"""
+  email: String!
+
+  """Phone number of the user"""
+  phone: String!
+}
+
+input UpdateUserInput {
+  """Name of the user"""
+  name: String
+
+  """Email of the user"""
+  email: String
+
+  """Phone number of the user"""
+  phone: String
+  id: Int!
+}
+
+input CreateCustomerInput {
+  """Name of the customer"""
+  name: String!
+
+  """Phone Number of the customer"""
+  phone: String!
+
+  """NID of the customer"""
+  nid: Float!
+
+  """Address of the customer"""
+  address: String!
+
+  """Hotel where the customer visited"""
+  hotel: ID!
+}
+
+input UpdateCustomerInput {
+  """Name of the customer"""
+  name: String
+
+  """Phone Number of the customer"""
+  phone: String
+
+  """NID of the customer"""
+  nid: Float
+
+  """Address of the customer"""
+  address: String
+
+  """Hotel where the customer visited"""
+  hotel: ID
   id: Int!
 }
