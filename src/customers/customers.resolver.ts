@@ -1,8 +1,8 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CustomersService } from './customers.service';
-import { Customer } from './schemas/customer.schemas';
 import { CreateCustomerInput } from './dto/create-customer.input';
 import { UpdateCustomerInput } from './dto/update-customer.input';
+import { Customer } from './schemas/customer.schema';
 
 @Resolver(() => Customer)
 export class CustomersResolver {

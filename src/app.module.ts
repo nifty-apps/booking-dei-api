@@ -9,6 +9,7 @@ import { HotelsModule } from './hotels/hotels.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { UsersModule } from './users/users.module';
 import { CustomersModule } from './customers/customers.module';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CustomersModule } from './customers/customers.module';
     RoomsModule,
     UsersModule,
     CustomersModule,
+    BookingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

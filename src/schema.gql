@@ -61,6 +61,27 @@ type Customer {
   hotel: ID!
 }
 
+type Booking {
+  """Unique identifier for the booking"""
+  _id: ID!
+
+  """Payment status of the booking"""
+  paymentStatus: PaymentStatus!
+
+  """Customer who made the booking"""
+  customer: ID!
+
+  """Hotel where the booking were generated"""
+  hotel: ID!
+}
+
+"""Payment status for a booking"""
+enum PaymentStatus {
+  UNPAID
+  PARTIAL_PAID
+  PAID
+}
+
 type Query {
   hotels: [Hotel!]!
   hotel(id: Int!): Hotel!
@@ -70,6 +91,8 @@ type Query {
   user(id: Int!): User!
   customers: [Customer!]!
   customer(id: Int!): Customer!
+  bookings: [Booking!]!
+  booking(id: Int!): Booking!
 }
 
 type Mutation {
@@ -85,6 +108,9 @@ type Mutation {
   createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
   updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
   removeCustomer(id: Int!): Customer!
+  createBooking(createBookingInput: CreateBookingInput!): Booking!
+  updateBooking(updateBookingInput: UpdateBookingInput!): Booking!
+  removeBooking(id: Int!): Booking!
 }
 
 input CreateHotelInput {
@@ -181,6 +207,29 @@ input UpdateCustomerInput {
   address: String
 
   """Hotel where the customer visited"""
+  hotel: ID
+  id: Int!
+}
+
+input CreateBookingInput {
+  """Payment status of the customer"""
+  paymentStatus: PaymentStatus!
+
+  """Customer who made the booking"""
+  customer: ID!
+
+  """Hotel where the booking were generated"""
+  hotel: ID!
+}
+
+input UpdateBookingInput {
+  """Payment status of the customer"""
+  paymentStatus: PaymentStatus
+
+  """Customer who made the booking"""
+  customer: ID
+
+  """Hotel where the booking were generated"""
   hotel: ID
   id: Int!
 }
