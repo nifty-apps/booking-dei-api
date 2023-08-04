@@ -4,15 +4,33 @@ import { Model } from 'mongoose';
 import { CreateBookingInput } from './dto/create-booking.input';
 import { UpdateBookingInput } from './dto/update-booking.input';
 import { Booking, BookingDocument } from './schemas/booking.schema';
+import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
 @Injectable()
 export class BookingsService {
   constructor(
     @InjectModel(Booking.name) private bookingModel: Model<BookingDocument>,
+    @InjectModel(RoomBooking.name)
+    private roomBookingModel: Model<RoomBookingDocument>,
   ) {}
 
-  create(createBookingInput: CreateBookingInput) {
-    return this.bookingModel.create(createBookingInput);
+  async create(createBookingInput: CreateBookingInput) {
+    const booking = await this.bookingModel.create({
+      customer: createBookingInput.customer,
+      hotel: createBookingInput.hotel,
+      paymentStatus: createBookingInput.paymentStatus,
+    });
+
+    createBookingInput.roomBookings.forEach(async (roomBooking) => {
+      await this.roomBookingModel.create({
+        room: roomBooking.room,
+        booking: booking._id,
+        hotel: createBookingInput.hotel,
+        status: roomBooking.status,
+      });
+    });
+
+    return booking;
   }
 
   findAll() {

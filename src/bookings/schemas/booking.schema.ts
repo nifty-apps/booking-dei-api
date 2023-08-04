@@ -1,17 +1,24 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
-import { PaymentStatus } from '../enums/payment-status';
+
+export enum PaymentStatus {
+  UNPAID = 'UNPAID',
+  PARTIAL_PAID = 'PARTIAL_PAID',
+  PAID = 'PAID',
+}
+
+// Register the enum with GraphQL
+registerEnumType(PaymentStatus, {
+  name: 'PaymentStatus', // this one is mandatory
+  description: 'Payment status for a booking', // this one is optional
+});
 
 @ObjectType()
 @Schema({ timestamps: true })
 export class Booking {
   @Field(() => ID, { description: 'Unique identifier for the booking' })
   _id: ObjectId;
-
-  @Field(() => PaymentStatus, { description: 'Payment status of the booking' })
-  @Prop({ required: true, enum: PaymentStatus })
-  paymentStatus: PaymentStatus;
 
   @Field(() => ID, { description: 'Customer who made the booking' })
   @Prop({
@@ -28,6 +35,10 @@ export class Booking {
     ref: 'Hotel',
   })
   hotel: ObjectId;
+
+  @Field(() => PaymentStatus, { description: 'Payment status of the booking' })
+  @Prop({ required: true, enum: PaymentStatus })
+  paymentStatus: PaymentStatus;
 }
 
 export type BookingDocument = HydratedDocument<Booking>;

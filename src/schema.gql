@@ -65,14 +65,14 @@ type Booking {
   """Unique identifier for the booking"""
   _id: ID!
 
-  """Payment status of the booking"""
-  paymentStatus: PaymentStatus!
-
   """Customer who made the booking"""
   customer: ID!
 
   """Hotel where the booking were generated"""
   hotel: ID!
+
+  """Payment status of the booking"""
+  paymentStatus: PaymentStatus!
 }
 
 """Payment status for a booking"""
@@ -212,24 +212,45 @@ input UpdateCustomerInput {
 }
 
 input CreateBookingInput {
-  """Payment status of the customer"""
-  paymentStatus: PaymentStatus!
-
   """Customer who made the booking"""
   customer: ID!
 
   """Hotel where the booking were generated"""
   hotel: ID!
+
+  """Room bookings of the booking"""
+  roomBookings: [CreateRoomBookingInput!]!
+
+  """Payment status of the customer"""
+  paymentStatus: PaymentStatus!
+}
+
+input CreateRoomBookingInput {
+  """Room where the booking were generated"""
+  room: ID!
+
+  """Room booking status of the Room booking"""
+  status: RoomBookingStatus!
+}
+
+"""Room booking status for a booking"""
+enum RoomBookingStatus {
+  BOOKED
+  CHECKEDIN
+  CHECKEDOUT
 }
 
 input UpdateBookingInput {
-  """Payment status of the customer"""
-  paymentStatus: PaymentStatus
-
   """Customer who made the booking"""
   customer: ID
 
   """Hotel where the booking were generated"""
   hotel: ID
+
+  """Room bookings of the booking"""
+  roomBookings: [CreateRoomBookingInput!]
+
+  """Payment status of the customer"""
+  paymentStatus: PaymentStatus
   id: Int!
 }
