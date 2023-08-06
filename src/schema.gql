@@ -135,6 +135,11 @@ type User {
   password: String!
 }
 
+type LoginResponse {
+  accessToken: String!
+  user: User!
+}
+
 type Query {
   hotels: [Hotel!]!
   hotel(id: Int!): Hotel!
@@ -168,6 +173,7 @@ type Mutation {
   createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
   updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
   removeTransaction(id: Int!): Transaction!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
 }
 
 input CreateHotelInput {
@@ -352,4 +358,9 @@ input UpdateTransactionInput {
   """Amount of the transaction"""
   amount: Float
   id: Int!
+}
+
+input LoginUserInput {
+  phone: String!
+  password: String!
 }
