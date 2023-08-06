@@ -9,8 +9,8 @@ import { BookingsModule } from './bookings/bookings.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { HotelsModule } from './hotels/hotels.module';
 import { RoomsModule } from './rooms/rooms.module';
-import { UsersModule } from './users/users.module';
 import { TransactionsModule } from './transactions/transactions.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [

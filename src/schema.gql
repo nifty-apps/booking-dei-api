@@ -78,20 +78,6 @@ type Room {
   type: ID!
 }
 
-type User {
-  """Unique identifier of the user"""
-  _id: ID!
-
-  """Name of the user"""
-  name: String!
-
-  """Email of the user"""
-  email: String!
-
-  """Phone number of the user"""
-  phone: String!
-}
-
 type Transaction {
   """Unique identifier for the transaction"""
   _id: ID!
@@ -132,13 +118,30 @@ enum TransactionSource {
   BKASH
 }
 
+type User {
+  """Unique identifier of the user"""
+  _id: ID!
+
+  """Name of the user"""
+  name: String!
+
+  """Email of the user"""
+  email: String
+
+  """Phone number of the user"""
+  phone: String!
+
+  """Password of the user"""
+  password: String!
+}
+
 type Query {
   hotels: [Hotel!]!
   hotel(id: Int!): Hotel!
   rooms: [Room!]!
   room(id: Int!): Room!
   users: [User!]!
-  user(id: Int!): User!
+  user(phone: String!): User!
   contact(id: Int!): Contact!
   bookings: [Booking!]!
   booking(id: Int!): Booking!
@@ -212,10 +215,13 @@ input CreateUserInput {
   name: String!
 
   """Email of the user"""
-  email: String!
+  email: String
 
   """Phone number of the user"""
   phone: String!
+
+  """Password of the user"""
+  password: String!
 }
 
 input UpdateUserInput {
@@ -227,6 +233,9 @@ input UpdateUserInput {
 
   """Phone number of the user"""
   phone: String
+
+  """Password of the user"""
+  password: String
   id: Int!
 }
 
