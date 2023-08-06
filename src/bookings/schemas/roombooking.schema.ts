@@ -6,6 +6,7 @@ export enum RoomBookingStatus {
   BOOKED = 'BOOKED',
   CHECKEDIN = 'CHECKEDIN',
   CHECKEDOUT = 'CHECKEDOUT',
+  CANCELLED = 'CANCELLED',
 }
 
 // Register the enum with GraphQL

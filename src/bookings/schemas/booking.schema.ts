@@ -20,13 +20,13 @@ export class Booking {
   @Field(() => ID, { description: 'Unique identifier for the booking' })
   _id: ObjectId;
 
-  @Field(() => ID, { description: 'Customer who made the booking' })
+  @Field(() => ID, { description: 'Contact who made the booking' })
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Customer',
+    ref: 'Contact',
   })
-  customer: ObjectId;
+  contact: ObjectId;
 
   @Field(() => ID, { description: 'Hotel where the booking were generated' })
   @Prop({

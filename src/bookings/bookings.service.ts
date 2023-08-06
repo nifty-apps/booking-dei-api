@@ -16,7 +16,7 @@ export class BookingsService {
 
   async create(createBookingInput: CreateBookingInput) {
     const booking = await this.bookingModel.create({
-      customer: createBookingInput.customer,
+      contact: createBookingInput.contact,
       hotel: createBookingInput.hotel,
       paymentStatus: createBookingInput.paymentStatus,
     });

@@ -5,11 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { BookingsModule } from './bookings/bookings.module';
+import { ContactsModule } from './contacts/contacts.module';
 import { HotelsModule } from './hotels/hotels.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { UsersModule } from './users/users.module';
-import { CustomersModule } from './customers/customers.module';
-import { BookingsModule } from './bookings/bookings.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [
@@ -22,8 +23,9 @@ import { BookingsModule } from './bookings/bookings.module';
     HotelsModule,
     RoomsModule,
     UsersModule,
-    CustomersModule,
+    ContactsModule,
     BookingsModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

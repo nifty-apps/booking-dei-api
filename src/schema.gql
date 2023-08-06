@@ -2,6 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Booking {
+  """Unique identifier for the booking"""
+  _id: ID!
+
+  """Contact who made the booking"""
+  contact: ID!
+
+  """Hotel where the booking were generated"""
+  hotel: ID!
+
+  """Payment status of the booking"""
+  paymentStatus: PaymentStatus!
+}
+
+"""Payment status for a booking"""
+enum PaymentStatus {
+  UNPAID
+  PARTIAL_PAID
+  PAID
+}
+
 type Hotel {
   """Unique identifier of the hotel"""
   _id: ID!
@@ -11,6 +32,36 @@ type Hotel {
 
   """Address of the hotel"""
   address: String
+}
+
+type Contact {
+  """Example field (placeholder)"""
+  _id: ID!
+
+  """Name of the contact"""
+  name: String!
+
+  """Phone Number of the contact"""
+  phone: String!
+
+  """NID of the contact"""
+  nid: Float
+
+  """Address of the contact"""
+  address: String
+
+  """Hotel where the contact visited"""
+  hotel: ID!
+
+  """Type of the contact"""
+  type: ContactTypes!
+}
+
+"""The type of the contact"""
+enum ContactTypes {
+  CUSTOMER
+  EMPLOYEE
+  VENDOR
 }
 
 type Room {
@@ -41,45 +92,44 @@ type User {
   phone: String!
 }
 
-type Customer {
-  """Example field (placeholder)"""
+type Transaction {
+  """Unique identifier for the transaction"""
   _id: ID!
 
-  """Name of the customer"""
-  name: String!
+  """Contact who made the booking"""
+  contact: ID!
 
-  """Phone Number of the customer"""
-  phone: String!
-
-  """NID of the customer"""
-  nid: Float
-
-  """Address of the customer"""
-  address: String
-
-  """Hotel where the customer visited"""
-  hotel: ID!
-}
-
-type Booking {
   """Unique identifier for the booking"""
-  _id: ID!
+  booking: ID
 
-  """Customer who made the booking"""
-  customer: ID!
-
-  """Hotel where the booking were generated"""
+  """Hotel where the transaction were made"""
   hotel: ID!
 
-  """Payment status of the booking"""
-  paymentStatus: PaymentStatus!
+  """Amount of the transaction"""
+  amount: Float!
+
+  """Type of the transaction"""
+  type: TransactionType!
+
+  """Source of the transaction"""
+  source: TransactionSource!
 }
 
-"""Payment status for a booking"""
-enum PaymentStatus {
-  UNPAID
-  PARTIAL_PAID
-  PAID
+"""Type of the transaction"""
+enum TransactionType {
+  INCOME
+  SALARY
+  ELECTRICITY
+  WATER
+  RENT
+  OTHEREXPENSE
+}
+
+"""Source of the transaction"""
+enum TransactionSource {
+  CASH
+  BANK
+  BKASH
 }
 
 type Query {
@@ -89,10 +139,11 @@ type Query {
   room(id: Int!): Room!
   users: [User!]!
   user(id: Int!): User!
-  customers: [Customer!]!
-  customer(id: Int!): Customer!
+  contact(id: Int!): Contact!
   bookings: [Booking!]!
   booking(id: Int!): Booking!
+  transactions: [Transaction!]!
+  transaction(id: Int!): Transaction!
 }
 
 type Mutation {
@@ -105,12 +156,15 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
-  createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
-  updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
-  removeCustomer(id: Int!): Customer!
+  createContact(createContactInput: CreateContactInput!): Contact!
+  updateContact(updateContactInput: UpdateContactInput!): Contact!
+  removeContact(id: Int!): Contact!
   createBooking(createBookingInput: CreateBookingInput!): Booking!
   updateBooking(updateBookingInput: UpdateBookingInput!): Booking!
   removeBooking(id: Int!): Booking!
+  createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
+  updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
+  removeTransaction(id: Int!): Transaction!
 }
 
 input CreateHotelInput {
@@ -176,44 +230,50 @@ input UpdateUserInput {
   id: Int!
 }
 
-input CreateCustomerInput {
-  """Name of the customer"""
+input CreateContactInput {
+  """Name of the contact"""
   name: String!
 
-  """Phone Number of the customer"""
+  """Phone Number of the contact"""
   phone: String!
 
-  """NID of the customer"""
-  nid: Float!
-
-  """Address of the customer"""
-  address: String!
-
-  """Hotel where the customer visited"""
-  hotel: ID!
-}
-
-input UpdateCustomerInput {
-  """Name of the customer"""
-  name: String
-
-  """Phone Number of the customer"""
-  phone: String
-
-  """NID of the customer"""
+  """NID of the contact"""
   nid: Float
 
-  """Address of the customer"""
+  """Address of the contact"""
   address: String
 
-  """Hotel where the customer visited"""
+  """Hotel where the contact visited"""
+  hotel: ID!
+
+  """Type of the contact"""
+  type: ContactTypes!
+}
+
+input UpdateContactInput {
+  """Name of the contact"""
+  name: String
+
+  """Phone Number of the contact"""
+  phone: String
+
+  """NID of the contact"""
+  nid: Float
+
+  """Address of the contact"""
+  address: String
+
+  """Hotel where the contact visited"""
   hotel: ID
+
+  """Type of the contact"""
+  type: ContactTypes
   id: Int!
 }
 
 input CreateBookingInput {
-  """Customer who made the booking"""
-  customer: ID!
+  """Contact who made the booking"""
+  contact: ID!
 
   """Hotel where the booking were generated"""
   hotel: ID!
@@ -238,11 +298,12 @@ enum RoomBookingStatus {
   BOOKED
   CHECKEDIN
   CHECKEDOUT
+  CANCELLED
 }
 
 input UpdateBookingInput {
-  """Customer who made the booking"""
-  customer: ID
+  """Contact who made the booking"""
+  contact: ID
 
   """Hotel where the booking were generated"""
   hotel: ID
@@ -252,5 +313,34 @@ input UpdateBookingInput {
 
   """Payment status of the customer"""
   paymentStatus: PaymentStatus
+  id: Int!
+}
+
+input CreateTransactionInput {
+  """Contact who made the booking"""
+  contact: ID!
+
+  """Type of the transaction"""
+  type: TransactionType!
+
+  """Source of the transaction"""
+  source: TransactionSource!
+
+  """Amount of the transaction"""
+  amount: Float!
+}
+
+input UpdateTransactionInput {
+  """Contact who made the booking"""
+  contact: ID
+
+  """Type of the transaction"""
+  type: TransactionType
+
+  """Source of the transaction"""
+  source: TransactionSource
+
+  """Amount of the transaction"""
+  amount: Float
   id: Int!
 }

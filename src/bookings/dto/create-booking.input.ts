@@ -5,8 +5,8 @@ import { CreateRoomBookingInput } from './create-roombooking.input';
 
 @InputType()
 export class CreateBookingInput {
-  @Field(() => ID, { description: 'Customer who made the booking' })
-  customer: ObjectId;
+  @Field(() => ID, { description: 'Contact who made the booking' })
+  contact: ObjectId;
 
   @Field(() => ID, { description: 'Hotel where the booking were generated' })
   hotel: ObjectId;
