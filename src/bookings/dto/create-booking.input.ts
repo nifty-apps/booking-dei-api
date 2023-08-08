@@ -1,4 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
+import { IsEnum } from 'class-validator';
 import { ObjectId } from 'mongoose';
 import { PaymentStatus } from '../schemas/booking.schema';
 import { CreateRoomBookingInput } from './create-roombooking.input';
@@ -17,5 +18,6 @@ export class CreateBookingInput {
   roomBookings: CreateRoomBookingInput[];
 
   @Field(() => PaymentStatus, { description: 'Payment status of the customer' })
+  @IsEnum(PaymentStatus)
   paymentStatus: PaymentStatus;
 }

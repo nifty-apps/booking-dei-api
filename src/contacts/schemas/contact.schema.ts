@@ -21,15 +21,15 @@ export class Contact {
   _id: ObjectId;
 
   @Field({ description: 'Name of the contact' })
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   name: string;
 
-  @Field({ description: 'Phone Number of the contact' })
-  @Prop({ required: true })
+  @Field({ description: 'Phone number of the contact' })
+  @Prop({ required: true, unique: true })
   phone: string;
 
   @Field({ nullable: true, description: 'NID of the contact' })
-  @Prop()
+  @Prop({ type: Number, unique: true })
   nid?: number;
 
   @Field({ nullable: true, description: 'Address of the contact' })

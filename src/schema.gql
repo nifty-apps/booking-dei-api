@@ -63,7 +63,7 @@ type Contact {
   """Name of the contact"""
   name: String!
 
-  """Phone Number of the contact"""
+  """Phone number of the contact"""
   phone: String!
 
   """NID of the contact"""
@@ -90,7 +90,7 @@ type Room {
   """Unique identifier of the room"""
   _id: ID!
 
-  """Name of the room"""
+  """Number of the room"""
   number: Float!
 
   """Hotel where the room is located"""
@@ -144,7 +144,7 @@ type Query {
   hotels: [Hotel!]!
   hotel(id: Int!): Hotel!
   rooms: [Room!]!
-  room(id: Int!): Room!
+  room(id: ID!): Room!
   users: [User!]!
   user(phone: String!): User!
   contact(id: Int!): Contact!
@@ -161,6 +161,7 @@ type Mutation {
   createRoom(createRoomInput: CreateRoomInput!): Room!
   updateRoom(updateRoomInput: UpdateRoomInput!): Room!
   removeRoom(id: Int!): Room!
+  createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
   createContact(createContactInput: CreateContactInput!): Contact!
@@ -213,6 +214,20 @@ input UpdateRoomInput {
   """Type of the room"""
   type: ID
   id: Int!
+}
+
+input CreateUserInput {
+  """Name of the user"""
+  name: String!
+
+  """Email of the user"""
+  email: String
+
+  """Phone number of the user"""
+  phone: String!
+
+  """Password of the user"""
+  password: String!
 }
 
 input UpdateUserInput {
@@ -289,9 +304,26 @@ input CreateRoomBookingInput {
   """Room where the booking were generated"""
   room: ID!
 
+  """Check-in date of the Room booking"""
+  checkIn: DateTime!
+
+  """Check-out date of the Room booking"""
+  checkOut: DateTime!
+
+  """Room rent for the booking"""
+  rent: Float!
+
+  """Discount for the booking"""
+  discount: Float!
+
   """Room booking status of the Room booking"""
   status: RoomBookingStatus!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 """Room booking status for a booking"""
 enum RoomBookingStatus {

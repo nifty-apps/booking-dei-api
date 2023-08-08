@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { CreateRoomInput } from './dto/create-room.input';
 import { UpdateRoomInput } from './dto/update-room.input';
 import { Room, RoomDocument } from './schemas/room.schema';
@@ -16,8 +16,8 @@ export class RoomsService {
     return this.roomModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} room`;
+  findOne(id: ObjectId) {
+    return this.roomModel.findById(id);
   }
 
   update(id: number, updateRoomInput: UpdateRoomInput) {

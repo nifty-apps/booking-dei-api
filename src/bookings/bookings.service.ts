@@ -27,6 +27,8 @@ export class BookingsService {
         booking: booking._id,
         hotel: createBookingInput.hotel,
         status: roomBooking.status,
+        checkIn: roomBooking.checkIn,
+        checkOut: roomBooking.checkOut,
       });
     });
 

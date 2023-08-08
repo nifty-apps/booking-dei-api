@@ -21,6 +21,18 @@ export class RoomBooking {
   @Field(() => ID, { description: 'Unique identifier for the room booking' })
   _id: ObjectId;
 
+  @Field({ description: 'Check-in date of the Room booking' })
+  @Prop({ required: true })
+  checkIn: Date;
+
+  @Field({ description: 'Check-out date of the Room booking' })
+  @Prop({ required: true })
+  checkOut: Date;
+
+  @Field({ description: 'Room rent for the booking' })
+  @Prop({ required: true })
+  rent: number;
+
   @Field(() => ID, { description: 'Room where the booking were generated' })
   @Prop({
     required: true,

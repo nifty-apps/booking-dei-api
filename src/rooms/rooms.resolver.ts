@@ -1,10 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { RoomsService } from './rooms.service';
-import { Room } from './schemas/room.schema';
+import { UseGuards } from '@nestjs/common';
+import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ObjectId } from 'mongoose';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateRoomInput } from './dto/create-room.input';
 import { UpdateRoomInput } from './dto/update-room.input';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RoomsService } from './rooms.service';
+import { Room } from './schemas/room.schema';
 
 @Resolver(() => Room)
 @UseGuards(JwtAuthGuard)
@@ -22,7 +23,7 @@ export class RoomsResolver {
   }
 
   @Query(() => Room, { name: 'room' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.roomsService.findOne(id);
   }
 

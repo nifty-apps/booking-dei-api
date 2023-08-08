@@ -1,11 +1,13 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsMongoId } from 'class-validator';
 import { HydratedDocument, ObjectId } from 'mongoose';
 
 @ObjectType()
 @Schema({ timestamps: true })
 export class User {
   @Field(() => ID, { description: 'Unique identifier of the user' })
+  @IsMongoId()
   _id: ObjectId;
 
   @Field({ description: 'Name of the user' })
@@ -13,11 +15,11 @@ export class User {
   name: string;
 
   @Field({ nullable: true, description: 'Email of the user' })
-  @Prop()
+  @Prop({ unique: true })
   email?: string;
 
   @Field({ description: 'Phone number of the user' })
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   phone: string;
 
   @Field({ description: 'Password of the user' })

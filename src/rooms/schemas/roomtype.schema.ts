@@ -9,11 +9,11 @@ export class RoomType {
   _id: ObjectId;
 
   @Field({ description: 'Title of the room type' })
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   title: string;
 
   @Field({ description: 'Rent of the room type' })
-  @Prop({ required: true })
+  @Prop({ type: Number, required: true })
   rent: number;
 
   @Field(() => ID, { description: 'Hotel where the room is located' })
