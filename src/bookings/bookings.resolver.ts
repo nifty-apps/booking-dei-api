@@ -3,8 +3,11 @@ import { BookingsService } from './bookings.service';
 import { CreateBookingInput } from './dto/create-booking.input';
 import { UpdateBookingInput } from './dto/update-booking.input';
 import { Booking } from './schemas/booking.schema';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Resolver(() => Booking)
+@UseGuards(JwtAuthGuard)
 export class BookingsResolver {
   constructor(private readonly bookingsService: BookingsService) {}
 

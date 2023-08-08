@@ -17,6 +17,7 @@ export class UsersService {
   }
 
   findOne(phone: string) {
+    console.log(phone);
     return this.userModel.findOne({ phone: phone });
   }
 

@@ -1,10 +1,13 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { HotelsService } from './hotels.service';
-import { Hotel } from './schemas/hotel.schemas';
+import { UseGuards } from '@nestjs/common';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateHotelInput } from './dto/create-hotel.input';
 import { UpdateHotelInput } from './dto/update-hotel.input';
+import { HotelsService } from './hotels.service';
+import { Hotel } from './schemas/hotel.schemas';
 
 @Resolver(() => Hotel)
+@UseGuards(JwtAuthGuard)
 export class HotelsResolver {
   constructor(private readonly hotelsService: HotelsService) {}
 

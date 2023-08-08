@@ -2,6 +2,28 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  """Unique identifier of the user"""
+  _id: ID!
+
+  """Name of the user"""
+  name: String!
+
+  """Email of the user"""
+  email: String
+
+  """Phone number of the user"""
+  phone: String!
+
+  """Password of the user"""
+  password: String!
+}
+
+type LoginResponseDto {
+  access_token: String!
+  user: User!
+}
+
 type Booking {
   """Unique identifier for the booking"""
   _id: ID!
@@ -118,28 +140,6 @@ enum TransactionSource {
   BKASH
 }
 
-type User {
-  """Unique identifier of the user"""
-  _id: ID!
-
-  """Name of the user"""
-  name: String!
-
-  """Email of the user"""
-  email: String
-
-  """Phone number of the user"""
-  phone: String!
-
-  """Password of the user"""
-  password: String!
-}
-
-type LoginResponse {
-  accessToken: String!
-  user: User!
-}
-
 type Query {
   hotels: [Hotel!]!
   hotel(id: Int!): Hotel!
@@ -161,7 +161,6 @@ type Mutation {
   createRoom(createRoomInput: CreateRoomInput!): Room!
   updateRoom(updateRoomInput: UpdateRoomInput!): Room!
   removeRoom(id: Int!): Room!
-  createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
   createContact(createContactInput: CreateContactInput!): Contact!
@@ -173,7 +172,7 @@ type Mutation {
   createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
   updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
   removeTransaction(id: Int!): Transaction!
-  login(loginUserInput: LoginUserInput!): LoginResponse!
+  login(phone: String!, password: String!): LoginResponseDto!
 }
 
 input CreateHotelInput {
@@ -214,20 +213,6 @@ input UpdateRoomInput {
   """Type of the room"""
   type: ID
   id: Int!
-}
-
-input CreateUserInput {
-  """Name of the user"""
-  name: String!
-
-  """Email of the user"""
-  email: String
-
-  """Phone number of the user"""
-  phone: String!
-
-  """Password of the user"""
-  password: String!
 }
 
 input UpdateUserInput {
@@ -358,9 +343,4 @@ input UpdateTransactionInput {
   """Amount of the transaction"""
   amount: Float
   id: Int!
-}
-
-input LoginUserInput {
-  phone: String!
-  password: String!
 }

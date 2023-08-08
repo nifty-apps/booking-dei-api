@@ -3,8 +3,11 @@ import { RoomsService } from './rooms.service';
 import { Room } from './schemas/room.schema';
 import { CreateRoomInput } from './dto/create-room.input';
 import { UpdateRoomInput } from './dto/update-room.input';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Resolver(() => Room)
+@UseGuards(JwtAuthGuard)
 export class RoomsResolver {
   constructor(private readonly roomsService: RoomsService) {}
 

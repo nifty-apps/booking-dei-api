@@ -1,15 +1,21 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { TransactionsService } from './transactions.service';
-import { Transaction } from './schemas/transaction.schema';
+import { UseGuards } from '@nestjs/common';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateTransactionInput } from './dto/create-transaction.input';
 import { UpdateTransactionInput } from './dto/update-transaction.input';
+import { Transaction } from './schemas/transaction.schema';
+import { TransactionsService } from './transactions.service';
 
 @Resolver(() => Transaction)
+@UseGuards(JwtAuthGuard)
 export class TransactionsResolver {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   @Mutation(() => Transaction)
-  createTransaction(@Args('createTransactionInput') createTransactionInput: CreateTransactionInput) {
+  createTransaction(
+    @Args('createTransactionInput')
+    createTransactionInput: CreateTransactionInput,
+  ) {
     return this.transactionsService.create(createTransactionInput);
   }
 
@@ -24,8 +30,14 @@ export class TransactionsResolver {
   }
 
   @Mutation(() => Transaction)
-  updateTransaction(@Args('updateTransactionInput') updateTransactionInput: UpdateTransactionInput) {
-    return this.transactionsService.update(updateTransactionInput.id, updateTransactionInput);
+  updateTransaction(
+    @Args('updateTransactionInput')
+    updateTransactionInput: UpdateTransactionInput,
+  ) {
+    return this.transactionsService.update(
+      updateTransactionInput.id,
+      updateTransactionInput,
+    );
   }
 
   @Mutation(() => Transaction)
