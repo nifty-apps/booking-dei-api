@@ -1,4 +1,5 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ObjectId } from 'mongoose';
 import { ContactsService } from './contacts.service';
 import { CreateContactInput } from './dto/create-contact.input';
 import { UpdateContactInput } from './dto/update-contact.input';
@@ -15,13 +16,13 @@ export class ContactsResolver {
     return this.contactsService.create(createContactInput);
   }
 
-  @Query(() => [Contact], { name: 'contact' })
+  @Query(() => [Contact], { name: 'contacts' })
   findAll() {
     return this.contactsService.findAll();
   }
 
   @Query(() => Contact, { name: 'contact' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.contactsService.findOne(id);
   }
 

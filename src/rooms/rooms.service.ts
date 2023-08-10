@@ -8,6 +8,7 @@ import { Room, RoomDocument } from './schemas/room.schema';
 @Injectable()
 export class RoomsService {
   constructor(@InjectModel(Room.name) private roomModel: Model<RoomDocument>) {}
+
   create(createRoomInput: CreateRoomInput) {
     return this.roomModel.create(createRoomInput);
   }

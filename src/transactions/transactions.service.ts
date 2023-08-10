@@ -1,19 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateTransactionInput } from './dto/create-transaction.input';
 import { UpdateTransactionInput } from './dto/update-transaction.input';
+import { Transaction, TransactionDocument } from './schemas/transaction.schema';
 
 @Injectable()
 export class TransactionsService {
+  constructor(
+    @InjectModel(Transaction.name)
+    private transactionModel: Model<TransactionDocument>,
+  ) {}
+
   create(createTransactionInput: CreateTransactionInput) {
-    return 'This action adds a new transaction';
+    return this.transactionModel.create(createTransactionInput);
   }
 
   findAll() {
-    return `This action returns all transactions`;
+    return this.transactionModel.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} transaction`;
+    return this.transactionModel.findById(id);
   }
 
   update(id: number, updateTransactionInput: UpdateTransactionInput) {

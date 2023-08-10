@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsMongoId, IsString } from 'class-validator';
 import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 
 export enum ContactTypes {
@@ -18,10 +19,12 @@ registerEnumType(ContactTypes, {
 @Schema({ timestamps: true })
 export class Contact {
   @Field(() => ID, { description: 'Example field (placeholder)' })
+  @IsMongoId()
   _id: ObjectId;
 
   @Field({ description: 'Name of the contact' })
   @Prop({ type: String, required: true })
+  @IsString()
   name: string;
 
   @Field({ description: 'Phone number of the contact' })

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { CreateContactInput } from './dto/create-contact.input';
 import { UpdateContactInput } from './dto/update-contact.input';
 import { Contact, ContactDocument } from './schemas/contact.schema';
@@ -19,8 +19,8 @@ export class ContactsService {
     return this.contactModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contact`;
+  findOne(id: ObjectId) {
+    return this.contactModel.findById(id);
   }
 
   update(id: number, updateContactInput: UpdateContactInput) {

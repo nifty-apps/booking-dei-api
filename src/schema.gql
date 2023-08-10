@@ -115,9 +115,7 @@ type RoomType {
 type Transaction {
   """Unique identifier for the transaction"""
   _id: ID!
-
-  """Contact who made the booking"""
-  contact: ID!
+  contact: Contact!
 
   """Unique identifier for the booking"""
   booking: ID
@@ -125,28 +123,48 @@ type Transaction {
   """Hotel where the transaction were made"""
   hotel: ID!
 
-  """Amount of the transaction"""
-  amount: Float!
+  """Date of the transaction"""
+  date: DateTime!
 
   """Type of the transaction"""
-  type: TransactionType!
+  category: TransactionType
 
-  """Source of the transaction"""
-  source: TransactionSource!
+  """Sub Category of the transaction"""
+  subCategory: TransactionSubCategory
+
+  """Method of the transaction"""
+  method: TransactionMethod!
+
+  """Description of the transaction"""
+  description: String
+
+  """Amount of the transaction"""
+  amount: Float!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 """Type of the transaction"""
 enum TransactionType {
   INCOME
+  EXPENSE
+}
+
+"""Sub Category of the transaction"""
+enum TransactionSubCategory {
   SALARY
   ELECTRICITY
   WATER
   RENT
   OTHEREXPENSE
+  ROOMRENT
 }
 
-"""Source of the transaction"""
-enum TransactionSource {
+"""Method of the transaction"""
+enum TransactionMethod {
   CASH
   BANK
   BKASH
@@ -159,7 +177,8 @@ type Query {
   room(id: ID!): Room!
   users: [User!]!
   user(phone: String!): User!
-  contact(id: Int!): Contact!
+  contacts: [Contact!]!
+  contact(id: ID!): Contact!
   bookings: [Booking!]!
   booking(id: Int!): Booking!
   transactions: [Transaction!]!
@@ -332,11 +351,6 @@ input CreateRoomBookingInput {
   status: RoomBookingStatus!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 """Room booking status for a booking"""
 enum RoomBookingStatus {
   BOOKED
@@ -361,28 +375,58 @@ input UpdateBookingInput {
 }
 
 input CreateTransactionInput {
+  """Unique identifier for the booking"""
+  booking: ID
+
   """Contact who made the booking"""
   contact: ID!
 
-  """Type of the transaction"""
-  type: TransactionType!
+  """Hotel where the transaction was made"""
+  hotel: ID!
 
-  """Source of the transaction"""
-  source: TransactionSource!
+  """Date of the transaction"""
+  date: DateTime!
+
+  """Type of the transaction"""
+  category: TransactionType
+
+  """Sub Category of the transaction"""
+  subCategory: TransactionSubCategory
+
+  """Method of the transaction"""
+  method: TransactionMethod
+
+  """Description of the transaction"""
+  description: String
 
   """Amount of the transaction"""
   amount: Float!
 }
 
 input UpdateTransactionInput {
+  """Unique identifier for the booking"""
+  booking: ID
+
   """Contact who made the booking"""
   contact: ID
 
-  """Type of the transaction"""
-  type: TransactionType
+  """Hotel where the transaction was made"""
+  hotel: ID
 
-  """Source of the transaction"""
-  source: TransactionSource
+  """Date of the transaction"""
+  date: DateTime
+
+  """Type of the transaction"""
+  category: TransactionType
+
+  """Sub Category of the transaction"""
+  subCategory: TransactionSubCategory
+
+  """Method of the transaction"""
+  method: TransactionMethod
+
+  """Description of the transaction"""
+  description: String
 
   """Amount of the transaction"""
   amount: Float
