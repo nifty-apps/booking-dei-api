@@ -57,6 +57,15 @@ export class TransactionsResolver {
   removeTransaction(@Args('id', { type: () => Int }) id: number) {
     return this.transactionsService.remove(id);
   }
+  
+  @Query(() => [Transaction], { name: 'findBetweenDates' })
+  findBetweenDates(
+    @Args('startDate', { type: () => DateTime }) startDate: Date,
+    @Args('endDate', { type: () => DateTime }) endDate: Date,
+  ) {
+    return this.transactionsService.findBetweenDates(startDate, endDate);
+  }
+  
   //TODO: Optimize this query with populate
   @ResolveField('contact', () => Contact)
   getContact(@Parent() transaction: Transaction) {
