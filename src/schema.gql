@@ -90,14 +90,26 @@ type Room {
   """Unique identifier of the room"""
   _id: ID!
 
-  """Number of the room"""
-  number: Float!
+  """Number or name of the room"""
+  number: String!
+  type: RoomType!
 
   """Hotel where the room is located"""
   hotel: ID!
+}
 
-  """Type of the room"""
-  type: ID!
+type RoomType {
+  """Unique identifier of the room"""
+  _id: ID!
+
+  """Title of the room type"""
+  title: String!
+
+  """Rent of the room type"""
+  rent: Float!
+
+  """Hotel where the room is located"""
+  hotel: ID!
 }
 
 type Transaction {
@@ -194,8 +206,8 @@ input UpdateHotelInput {
 }
 
 input CreateRoomInput {
-  """Number of the room"""
-  number: Float!
+  """Number or name of the room"""
+  number: String!
 
   """Hotel where the room is located"""
   hotel: ID!
@@ -205,8 +217,8 @@ input CreateRoomInput {
 }
 
 input UpdateRoomInput {
-  """Number of the room"""
-  number: Float
+  """Number or name of the room"""
+  number: String
 
   """Hotel where the room is located"""
   hotel: ID

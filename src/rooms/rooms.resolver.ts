@@ -1,16 +1,30 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Int,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateRoomInput } from './dto/create-room.input';
 import { UpdateRoomInput } from './dto/update-room.input';
 import { RoomsService } from './rooms.service';
+import { RoomTypesService } from './roomtypes.service';
 import { Room } from './schemas/room.schema';
+import { RoomType } from './schemas/roomtype.schema';
 
 @Resolver(() => Room)
 @UseGuards(JwtAuthGuard)
 export class RoomsResolver {
-  constructor(private readonly roomsService: RoomsService) {}
+  constructor(
+    private readonly roomsService: RoomsService,
+    private readonly roomTypesService: RoomTypesService,
+  ) {}
 
   @Mutation(() => Room)
   createRoom(@Args('createRoomInput') createRoomInput: CreateRoomInput) {
@@ -35,5 +49,11 @@ export class RoomsResolver {
   @Mutation(() => Room)
   removeRoom(@Args('id', { type: () => Int }) id: number) {
     return this.roomsService.remove(id);
+  }
+
+  // TODO: Optimize this query with populate
+  @ResolveField('type', () => RoomType)
+  getType(@Parent() room: Room) {
+    return this.roomTypesService.findOne(room.type);
   }
 }

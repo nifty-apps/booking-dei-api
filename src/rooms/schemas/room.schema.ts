@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsMongoId } from 'class-validator';
+import { IsMongoId, IsString } from 'class-validator';
 import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 
 @ObjectType()
@@ -10,13 +10,10 @@ export class Room {
   @IsMongoId()
   _id: ObjectId;
 
-  @Field({ description: 'Number of the room' })
+  @Field({ description: 'Number or name of the room' })
   @Prop({ required: true })
-  number: number;
-
-  @Field(() => ID, { description: 'Hotel where the room is located' })
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' })
-  hotel: ObjectId;
+  @IsString()
+  number: string;
 
   @Field(() => ID, { description: 'Type of the room' })
   @Prop({
@@ -25,6 +22,10 @@ export class Room {
     ref: 'RoomType',
   })
   type: ObjectId;
+
+  @Field(() => ID, { description: 'Hotel where the room is located' })
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' })
+  hotel: ObjectId;
 }
 
 export type RoomDocument = HydratedDocument<Room>;
