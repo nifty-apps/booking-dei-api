@@ -31,4 +31,13 @@ export class TransactionsService {
   remove(id: number) {
     return `This action removes a #${id} transaction`;
   }
+  
+  findBetweenDates(startDate: Date, endDate: Date) {
+    return this.transactionModel.find({
+      date: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    });
+  }
 }
