@@ -42,4 +42,17 @@ export class BookingsResolver {
   removeBooking(@Args('id', { type: () => Int }) id: number) {
     return this.bookingsService.remove(id);
   }
+
+  @Query(() => [RoomBooking], { name: 'roomBookingsByHotelAndDateRange' })
+  getRoomBookingsByHotelAndDateRange(
+    @Args('hotelId') hotelId: string,
+    @Args('startDate') startDate: string,
+    @Args('endDate') endDate: string,
+  ) {
+    return this.bookingsService.getRoomBookingsByHotelAndDateRange(
+      hotelId,
+      new Date(startDate),
+      new Date(endDate),
+    );
+  }
 }
