@@ -1,23 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { RoomType, RoomTypeDocument } from 'src/rooms/schemas/roomtype.schema';
+import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
 @Injectable()
-export class RoomTypesService {
+export class RoomBookingService {
   constructor(
-    @InjectModel(RoomType.name) private roomTypeModel: Model<RoomTypeDocument>,
+    @InjectModel(RoomBooking.name)
+    private roomBookingModel: Model<RoomBookingDocument>,
   ) {}
   // create(createRoomInput: CreateRoomInput) {
   //   return this.roomTypeModel.create(createRoomInput);
   // }
 
   findAll() {
-    return this.roomTypeModel.find();
+    return this.roomBookingModel.find();
   }
 
   findOne(id: ObjectId) {
-    return this.roomTypeModel.findById(id);
+    return this.roomBookingModel.findById(id);
+  }
+
+  async getRoomBookingsByHotelAndDateRange(
+    hotelId: ObjectId,
+    startDate: Date,
+    endDate: Date,
+  ) {
+    return this.roomBookingModel.find({
+      hotel: hotelId,
+      checkIn: { $gte: startDate, $lte: endDate },
+    });
   }
 
   // update(id: number, updateRoomInput: UpdateRoomInput) {
