@@ -8,6 +8,7 @@ import { UpdateBookingInput } from './dto/update-booking.input';
 import { RoomBookingService } from './roombookings.service';
 import { Booking } from './schemas/booking.schema';
 import { RoomBooking } from './schemas/roombooking.schema';
+import { RoomBookingFilter } from './dto/roombookingfilter.input';
 
 @Resolver(() => Booking)
 @UseGuards(JwtAuthGuard)
@@ -49,16 +50,10 @@ export class BookingsResolver {
     return this.bookingsService.remove(id);
   }
 
-  @Query(() => [RoomBooking], { name: 'roomBookingsByDateRange' })
-  findRoomBookingsByDateRange(
-    @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
-    @Args('startDate') startDate: Date,
-    @Args('endDate') endDate: Date,
+  @Query(() => [RoomBooking], { name: 'roomBookings' })
+  findRoomBookings(
+    @Args('roomBookingFilter') roomBookingFilter: RoomBookingFilter,
   ) {
-    return this.roomBookingsService.findRoomBookingsDateRange(
-      hotelId,
-      new Date(startDate),
-      new Date(endDate),
-    );
+    return this.roomBookingsService.findRoomBookings(roomBookingFilter);
   }
 }
