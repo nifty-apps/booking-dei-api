@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsDate, IsMongoId, IsNumber } from 'class-validator';
 import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 
 export enum RoomBookingStatus {
@@ -19,19 +20,28 @@ registerEnumType(RoomBookingStatus, {
 @Schema({ timestamps: true })
 export class RoomBooking {
   @Field(() => ID, { description: 'Unique identifier for the room booking' })
+  @IsMongoId()
   _id: ObjectId;
 
   @Field({ description: 'Check-in date of the Room booking' })
   @Prop({ required: true })
+  @IsDate()
   checkIn: Date;
 
   @Field({ description: 'Check-out date of the Room booking' })
   @Prop({ required: true })
+  @IsDate()
   checkOut: Date;
 
   @Field({ description: 'Room rent for the booking' })
   @Prop({ required: true })
+  @IsNumber()
   rent: number;
+
+  @Field({ nullable: true, description: 'Discount for the booking' })
+  @Prop()
+  @IsNumber()
+  discount: number;
 
   @Field(() => ID, { description: 'Room where the booking were generated' })
   @Prop({

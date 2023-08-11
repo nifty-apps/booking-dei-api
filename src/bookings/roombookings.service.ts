@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
+import { RoomBookingFilter } from './dto/roombookingfilter.input';
 import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
 @Injectable()
@@ -21,9 +22,7 @@ export class RoomBookingService {
     return this.roomBookingModel.findById(id);
   }
 
-  async findRoomBookings(
-    roomBookingFilter: RoomBookingFilter,
-  ) {
+  async findRoomBookings(roomBookingFilter: RoomBookingFilter) {
     const filter = {};
     if (roomBookingFilter.hotelId) {
       filter['hotel'] = roomBookingFilter.hotelId;

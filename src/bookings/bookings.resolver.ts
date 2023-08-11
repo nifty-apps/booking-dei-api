@@ -1,14 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { BookingsService } from './bookings.service';
 import { CreateBookingInput } from './dto/create-booking.input';
+import { RoomBookingFilter } from './dto/roombookingfilter.input';
 import { UpdateBookingInput } from './dto/update-booking.input';
 import { RoomBookingService } from './roombookings.service';
 import { Booking } from './schemas/booking.schema';
 import { RoomBooking } from './schemas/roombooking.schema';
-import { RoomBookingFilter } from './dto/roombookingfilter.input';
 
 @Resolver(() => Booking)
 @UseGuards(JwtAuthGuard)
