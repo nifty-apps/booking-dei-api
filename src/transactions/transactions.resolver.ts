@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
+  ID,
   Int,
   Mutation,
   Parent,
@@ -8,6 +9,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { ObjectId } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ContactsService } from 'src/contacts/contacts.service';
 import { Contact } from 'src/contacts/schemas/contact.schema';
@@ -58,12 +60,17 @@ export class TransactionsResolver {
     return this.transactionsService.remove(id);
   }
 
-  @Query(() => [Transaction], { name: 'transactionsBetweenDates' })
-  transactionsBetweenDates(
+  @Query(() => [Transaction], { name: 'transactionsByDateRange' })
+  findByDateRange(
+    @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
     @Args('startDate') startDate: Date,
     @Args('endDate') endDate: Date,
   ) {
-    return this.transactionsService.transactionsBetweenDates(startDate, endDate);
+    return this.transactionsService.findByDateRange(
+      hotelId,
+      new Date(startDate),
+      new Date(endDate),
+    );
   }
 
   //TODO: Optimize this query with populate

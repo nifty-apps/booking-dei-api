@@ -21,7 +21,7 @@ export class RoomBookingService {
     return this.roomBookingModel.findById(id);
   }
 
-  async findRoomBookingsByHotelAndDateRange(
+  async findRoomBookingsDateRange(
     hotelId: ObjectId,
     startDate: Date,
     endDate: Date,

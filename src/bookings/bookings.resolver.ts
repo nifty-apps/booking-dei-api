@@ -14,7 +14,7 @@ import { RoomBooking } from './schemas/roombooking.schema';
 export class BookingsResolver {
   constructor(
     private readonly bookingsService: BookingsService,
-    private readonly roomBookingService: RoomBookingService,
+    private readonly roomBookingsService: RoomBookingService,
   ) {}
 
   @Mutation(() => Booking)
@@ -49,13 +49,13 @@ export class BookingsResolver {
     return this.bookingsService.remove(id);
   }
 
-  @Query(() => [RoomBooking], { name: 'roomBookingsByHotelAndDateRange' })
-  findRoomBookingsByHotelAndDateRange(
+  @Query(() => [RoomBooking], { name: 'roomBookingsByDateRange' })
+  findRoomBookingsByDateRange(
     @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
     @Args('startDate') startDate: Date,
     @Args('endDate') endDate: Date,
   ) {
-    return this.roomBookingService.findRoomBookingsByHotelAndDateRange(
+    return this.roomBookingsService.findRoomBookingsDateRange(
       hotelId,
       new Date(startDate),
       new Date(endDate),

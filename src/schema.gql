@@ -215,10 +215,10 @@ type Query {
   contact(id: ID!): Contact!
   bookings: [Booking!]!
   booking(id: Int!): Booking!
-  roomBookingsByHotelAndDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!): [RoomBooking!]!
+  roomBookingsByDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!): [RoomBooking!]!
   transactions: [Transaction!]!
   transaction(id: Int!): Transaction!
-  transactionsBetweenDates(startDate: DateTime!, endDate: DateTime!): [Transaction!]!
+  transactionsByDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!): [Transaction!]!
 }
 
 type Mutation {

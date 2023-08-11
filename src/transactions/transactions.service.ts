@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { CreateTransactionInput } from './dto/create-transaction.input';
 import { UpdateTransactionInput } from './dto/update-transaction.input';
 import { Transaction, TransactionDocument } from './schemas/transaction.schema';
@@ -32,8 +32,9 @@ export class TransactionsService {
     return `This action removes a #${id} transaction`;
   }
 
-  transactionsBetweenDates(startDate: Date, endDate: Date) {
+  async findByDateRange(hotelId: ObjectId, startDate: Date, endDate: Date) {
     return this.transactionModel.find({
+      hotel: hotelId,
       date: {
         $gte: startDate,
         $lte: endDate,
