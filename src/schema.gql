@@ -58,6 +58,9 @@ type RoomBooking {
   """Room rent for the booking"""
   rent: Float!
 
+  """Discount for the booking"""
+  discount: Float
+
   """Room where the booking were generated"""
   room: ID!
 
@@ -215,10 +218,16 @@ type Query {
   contact(id: ID!): Contact!
   bookings: [Booking!]!
   booking(id: Int!): Booking!
-  roomBookingsByDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!): [RoomBooking!]!
+  roomBookings(roomBookingFilter: RoomBookingFilter!): [RoomBooking!]!
   transactions: [Transaction!]!
   transaction(id: Int!): Transaction!
   transactionsByDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!): [Transaction!]!
+}
+
+input RoomBookingFilter {
+  hotelId: ID!
+  startDate: DateTime
+  endDate: DateTime
 }
 
 type Mutation {

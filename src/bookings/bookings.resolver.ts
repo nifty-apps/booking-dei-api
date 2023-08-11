@@ -1,9 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { BookingsService } from './bookings.service';
 import { CreateBookingInput } from './dto/create-booking.input';
+import { RoomBookingFilter } from './dto/roombookingfilter.input';
 import { UpdateBookingInput } from './dto/update-booking.input';
 import { RoomBookingService } from './roombookings.service';
 import { Booking } from './schemas/booking.schema';
@@ -49,16 +49,10 @@ export class BookingsResolver {
     return this.bookingsService.remove(id);
   }
 
-  @Query(() => [RoomBooking], { name: 'roomBookingsByDateRange' })
-  findRoomBookingsByDateRange(
-    @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
-    @Args('startDate') startDate: Date,
-    @Args('endDate') endDate: Date,
+  @Query(() => [RoomBooking], { name: 'roomBookings' })
+  findRoomBookings(
+    @Args('roomBookingFilter') roomBookingFilter: RoomBookingFilter,
   ) {
-    return this.roomBookingsService.findRoomBookingsDateRange(
-      hotelId,
-      new Date(startDate),
-      new Date(endDate),
-    );
+    return this.roomBookingsService.findRoomBookings(roomBookingFilter);
   }
 }

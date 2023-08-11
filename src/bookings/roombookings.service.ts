@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
+import { RoomBookingFilter } from './dto/roombookingfilter.input';
 import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
 @Injectable()
@@ -21,16 +22,18 @@ export class RoomBookingService {
     return this.roomBookingModel.findById(id);
   }
 
-  async findRoomBookingsDateRange(
-    hotelId: ObjectId,
-    startDate: Date,
-    endDate: Date,
-  ) {
-    return this.roomBookingModel.find({
-      hotel: hotelId,
-      checkIn: { $gte: startDate },
-      checkOut: { $lte: endDate },
-    });
+  async findRoomBookings(roomBookingFilter: RoomBookingFilter) {
+    const filter = {};
+    if (roomBookingFilter.hotelId) {
+      filter['hotel'] = roomBookingFilter.hotelId;
+    }
+    if (roomBookingFilter.startDate) {
+      filter['checkIn'] = { $gte: roomBookingFilter.startDate };
+    }
+    if (roomBookingFilter.endDate) {
+      filter['checkOut'] = { $lte: roomBookingFilter.endDate };
+    }
+    return this.roomBookingModel.find(filter);
   }
 
   // update(id: number, updateRoomInput: UpdateRoomInput) {
