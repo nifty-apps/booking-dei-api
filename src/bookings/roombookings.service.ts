@@ -21,16 +21,20 @@ export class RoomBookingService {
     return this.roomBookingModel.findById(id);
   }
 
-  async findRoomBookingsDateRange(
-    hotelId: ObjectId,
-    startDate: Date,
-    endDate: Date,
+  async findRoomBookings(
+    roomBookingFilter: RoomBookingFilter,
   ) {
-    return this.roomBookingModel.find({
-      hotel: hotelId,
-      checkIn: { $gte: startDate },
-      checkOut: { $lte: endDate },
-    });
+    const filter = {};
+    if (roomBookingFilter.hotelId) {
+      filter['hotel'] = roomBookingFilter.hotelId;
+    }
+    if (roomBookingFilter.startDate) {
+      filter['checkIn'] = { $gte: roomBookingFilter.startDate };
+    }
+    if (roomBookingFilter.endDate) {
+      filter['checkOut'] = { $lte: roomBookingFilter.endDate };
+    }
+    return this.roomBookingModel.find(filter);
   }
 
   // update(id: number, updateRoomInput: UpdateRoomInput) {
