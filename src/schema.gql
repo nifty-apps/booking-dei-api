@@ -183,7 +183,7 @@ type Query {
   booking(id: Int!): Booking!
   transactions: [Transaction!]!
   transaction(id: Int!): Transaction!
-  findBetweenDates(startDate: DateTime!, endDate: DateTime!): [Transaction!]!
+  transactionsBetweenDates(startDate: DateTime!, endDate: DateTime!): [Transaction!]!
 }
 
 type Mutation {
