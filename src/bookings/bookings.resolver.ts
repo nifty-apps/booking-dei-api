@@ -1,15 +1,21 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ObjectId } from 'mongoose';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { BookingsService } from './bookings.service';
 import { CreateBookingInput } from './dto/create-booking.input';
 import { UpdateBookingInput } from './dto/update-booking.input';
+import { RoomBookingService } from './roombookings.service';
 import { Booking } from './schemas/booking.schema';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RoomBooking } from './schemas/roombooking.schema';
 
 @Resolver(() => Booking)
 @UseGuards(JwtAuthGuard)
 export class BookingsResolver {
-  constructor(private readonly bookingsService: BookingsService) {}
+  constructor(
+    private readonly bookingsService: BookingsService,
+    private readonly roomBookingService: RoomBookingService,
+  ) {}
 
   @Mutation(() => Booking)
   createBooking(
@@ -45,11 +51,11 @@ export class BookingsResolver {
 
   @Query(() => [RoomBooking], { name: 'roomBookingsByHotelAndDateRange' })
   getRoomBookingsByHotelAndDateRange(
-    @Args('hotelId') hotelId: string,
-    @Args('startDate') startDate: string,
-    @Args('endDate') endDate: string,
+    @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
+    @Args('startDate') startDate: Date,
+    @Args('endDate') endDate: Date,
   ) {
-    return this.bookingsService.getRoomBookingsByHotelAndDateRange(
+    return this.roomBookingService.getRoomBookingsByHotelAndDateRange(
       hotelId,
       new Date(startDate),
       new Date(endDate),

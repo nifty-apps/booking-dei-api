@@ -51,10 +51,5 @@ export class BookingsService {
     return `This action removes a #${id} booking`;
   }
 
-  async getRoomBookingsByHotelAndDateRange(hotelId: ObjectId, startDate: Date, endDate: Date) {
-    return this.roomBookingModel.find({
-      hotel: hotelId,
-      checkIn: { $gte: startDate, $lte: endDate },
-    });
-  }
+
 }

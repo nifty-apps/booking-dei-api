@@ -45,6 +45,45 @@ enum PaymentStatus {
   PAID
 }
 
+type RoomBooking {
+  """Unique identifier for the room booking"""
+  _id: ID!
+
+  """Check-in date of the Room booking"""
+  checkIn: DateTime!
+
+  """Check-out date of the Room booking"""
+  checkOut: DateTime!
+
+  """Room rent for the booking"""
+  rent: Float!
+
+  """Room where the booking were generated"""
+  room: ID!
+
+  """Unique identifier for the booking"""
+  booking: ID!
+
+  """Hotel where the booking were generated"""
+  hotel: ID!
+
+  """Room booking status of the booking"""
+  status: RoomBookingStatus!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Room booking status for a booking"""
+enum RoomBookingStatus {
+  BOOKED
+  CHECKEDIN
+  CHECKEDOUT
+  CANCELLED
+}
+
 type Hotel {
   """Unique identifier of the hotel"""
   _id: ID!
@@ -142,11 +181,6 @@ type Transaction {
   amount: Float!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 """Type of the transaction"""
 enum TransactionType {
   INCOME
@@ -181,6 +215,7 @@ type Query {
   contact(id: ID!): Contact!
   bookings: [Booking!]!
   booking(id: Int!): Booking!
+  roomBookingsByHotelAndDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!): [RoomBooking!]!
   transactions: [Transaction!]!
   transaction(id: Int!): Transaction!
   transactionsBetweenDates(startDate: DateTime!, endDate: DateTime!): [Transaction!]!
@@ -350,14 +385,6 @@ input CreateRoomBookingInput {
 
   """Room booking status of the Room booking"""
   status: RoomBookingStatus!
-}
-
-"""Room booking status for a booking"""
-enum RoomBookingStatus {
-  BOOKED
-  CHECKEDIN
-  CHECKEDOUT
-  CANCELLED
 }
 
 input UpdateBookingInput {
