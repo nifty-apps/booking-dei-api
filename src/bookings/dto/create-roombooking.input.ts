@@ -26,6 +26,7 @@ export class CreateRoomBookingInput {
   discount: number;
 
   @Field(() => RoomBookingStatus, {
+    nullable: true, //TODO: for drop down enum in postman
     description: 'Room booking status of the Room booking',
   })
   @IsEnum(RoomBookingStatus)

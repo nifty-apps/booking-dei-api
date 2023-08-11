@@ -21,14 +21,15 @@ export class RoomBookingService {
     return this.roomBookingModel.findById(id);
   }
 
-  async getRoomBookingsByHotelAndDateRange(
+  async findRoomBookingsByHotelAndDateRange(
     hotelId: ObjectId,
     startDate: Date,
     endDate: Date,
   ) {
     return this.roomBookingModel.find({
       hotel: hotelId,
-      checkIn: { $gte: startDate, $lte: endDate },
+      checkIn: { $gte: startDate },
+      checkOut: { $lte: endDate },
     });
   }
 

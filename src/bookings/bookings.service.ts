@@ -50,6 +50,4 @@ export class BookingsService {
   remove(id: number) {
     return `This action removes a #${id} booking`;
   }
-
-
 }

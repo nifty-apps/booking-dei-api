@@ -50,12 +50,12 @@ export class BookingsResolver {
   }
 
   @Query(() => [RoomBooking], { name: 'roomBookingsByHotelAndDateRange' })
-  getRoomBookingsByHotelAndDateRange(
+  findRoomBookingsByHotelAndDateRange(
     @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
     @Args('startDate') startDate: Date,
     @Args('endDate') endDate: Date,
   ) {
-    return this.roomBookingService.getRoomBookingsByHotelAndDateRange(
+    return this.roomBookingService.findRoomBookingsByHotelAndDateRange(
       hotelId,
       new Date(startDate),
       new Date(endDate),

@@ -17,7 +17,10 @@ export class CreateBookingInput {
   })
   roomBookings: CreateRoomBookingInput[];
 
-  @Field(() => PaymentStatus, { description: 'Payment status of the customer' })
+  @Field(() => PaymentStatus, {
+    nullable: true, //TODO: for drop down enum in postman
+    description: 'Payment status of the customer',
+  })
   @IsEnum(PaymentStatus)
   paymentStatus: PaymentStatus;
 }
