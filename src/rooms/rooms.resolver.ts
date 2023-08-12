@@ -17,6 +17,7 @@ import { RoomsService } from './rooms.service';
 import { RoomTypesService } from './roomtypes.service';
 import { Room } from './schemas/room.schema';
 import { RoomType } from './schemas/roomtype.schema';
+import { populate } from 'mongoose';
 
 @Resolver(() => Room)
 @UseGuards(JwtAuthGuard)
@@ -54,6 +55,6 @@ export class RoomsResolver {
   // TODO: Optimize this query with populate
   @ResolveField('type', () => RoomType)
   getType(@Parent() room: Room) {
-    return this.roomTypesService.findOne(room.type);
+    return room.populate('type');
   }
 }
