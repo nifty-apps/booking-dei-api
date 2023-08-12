@@ -27,7 +27,9 @@ export class BookingsService {
       const extraBreakfastCost = roomBooking.extraBreakfast ? 500 : 0;
       const discount = roomBooking.discount || 0;
 
-      const roomBookingRent = roomRent + extraBedCost + extraBreakfastCost - discount;
+      const roomBookingRent =
+        roomRent + extraBedCost + extraBreakfastCost - discount;
+      console.log(roomBookingRent);
 
       await this.roomBookingModel.create({
         room: roomBooking.room,
@@ -37,6 +39,9 @@ export class BookingsService {
         checkIn: roomBooking.checkIn,
         checkOut: roomBooking.checkOut,
         rent: roomBookingRent,
+        discount,
+        extraBed: roomBooking.extraBed,
+        extraBreakfast: roomBooking.extraBreakfast,
       });
     });
 
