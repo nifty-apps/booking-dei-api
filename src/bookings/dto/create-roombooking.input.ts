@@ -25,6 +25,12 @@ export class CreateRoomBookingInput {
   @IsNumber()
   discount: number;
 
+  @Field({ description: 'Extra bed for the booking' })
+  extraBed: boolean;
+
+  @Field({ description: 'Extra breakfast for the booking' })
+  extraBreakfast: boolean;
+
   @Field(() => RoomBookingStatus, {
     nullable: true, //TODO: for drop down enum in postman
     description: 'Room booking status of the Room booking',

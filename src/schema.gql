@@ -72,6 +72,12 @@ type RoomBooking {
 
   """Room booking status of the booking"""
   status: RoomBookingStatus!
+
+  """Extra bed option for the booking"""
+  extraBed: Boolean!
+
+  """Extra breakfast option for the booking"""
+  extraBreakfast: Boolean!
 }
 
 """
@@ -391,6 +397,12 @@ input CreateRoomBookingInput {
 
   """Discount for the booking"""
   discount: Float!
+
+  """Extra bed for the booking"""
+  extraBed: Boolean!
+
+  """Extra breakfast for the booking"""
+  extraBreakfast: Boolean!
 
   """Room booking status of the Room booking"""
   status: RoomBookingStatus
