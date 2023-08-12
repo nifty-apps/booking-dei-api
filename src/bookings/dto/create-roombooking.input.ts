@@ -1,5 +1,11 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsDate, IsEnum, IsMongoId, IsNumber } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEnum,
+  IsMongoId,
+  IsNumber,
+} from 'class-validator';
 import { ObjectId } from 'mongoose';
 import { RoomBookingStatus } from '../schemas/roombooking.schema';
 
@@ -26,9 +32,11 @@ export class CreateRoomBookingInput {
   discount: number;
 
   @Field({ description: 'Extra bed for the booking' })
+  @IsBoolean()
   extraBed: boolean;
 
   @Field({ description: 'Extra breakfast for the booking' })
+  @IsBoolean()
   extraBreakfast: boolean;
 
   @Field(() => RoomBookingStatus, {

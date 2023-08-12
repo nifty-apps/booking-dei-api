@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsDate, IsMongoId, IsNumber } from 'class-validator';
+import { IsBoolean, IsDate, IsMongoId, IsNumber } from 'class-validator';
 import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 
 export enum RoomBookingStatus {
@@ -42,6 +42,16 @@ export class RoomBooking {
   @Prop()
   @IsNumber()
   discount: number;
+
+  @Field({ description: 'Extra bed for the booking' })
+  @Prop({ required: true, default: false })
+  @IsBoolean()
+  extraBed: boolean;
+
+  @Field({ description: 'Extra breakfast for the booking' })
+  @Prop({ required: true, default: false })
+  @IsBoolean()
+  extraBreakfast: boolean;
 
   @Field(() => ID, { description: 'Room where the booking were generated' })
   @Prop({
