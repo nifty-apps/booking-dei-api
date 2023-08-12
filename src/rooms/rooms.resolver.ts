@@ -51,9 +51,29 @@ export class RoomsResolver {
     return this.roomsService.remove(id);
   }
 
-  // TODO: Optimize this query with populate
   @ResolveField('type', () => RoomType)
   getType(@Parent() room: Room) {
-    return this.roomTypesService.findOne(room.type);
+    return this.roomsService.aggregate([
+      {
+        $lookup: {
+          from: 'roomtypes',
+          localField: 'type',
+          foreignField: '_id',
+          as: 'type',
+        },
+      },
+      {
+        $match: {
+          _id: room._id,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: 1,
+          description: 1,
+        },
+      },
+    ]);
   }
 }
