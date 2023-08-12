@@ -36,6 +36,14 @@ export class Booking {
   })
   hotel: ObjectId;
 
+  @Field({ nullable: true, description: 'Rent for the booking' })
+  @Prop()
+  totalBookingRent?: number;
+
+  @Field({ nullable: true, description: 'Discount for the booking' })
+  @Prop()
+  discount?: number;
+
   @Field(() => PaymentStatus, { description: 'Payment status of the booking' })
   @Prop({ required: true, enum: PaymentStatus })
   paymentStatus: PaymentStatus;

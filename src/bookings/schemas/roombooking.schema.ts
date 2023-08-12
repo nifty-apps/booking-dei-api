@@ -41,7 +41,7 @@ export class RoomBooking {
   @Field({ nullable: true, description: 'Discount for the booking' })
   @Prop()
   @IsNumber()
-  discount: number;
+  discount?: number;
 
   @Field({ description: 'Extra bed for the booking' })
   @Prop({ required: true, default: false })
@@ -82,14 +82,6 @@ export class RoomBooking {
   })
   @Prop({ required: true, enum: RoomBookingStatus })
   status: RoomBookingStatus;
-
-  @Field({ description: 'Extra bed option for the booking' })
-  @Prop({ required: true, default: false })
-  extraBed: boolean;
-
-  @Field({ description: 'Extra breakfast option for the booking' })
-  @Prop({ required: true, default: false })
-  extraBreakfast: boolean;
 }
 
 export type RoomBookingDocument = HydratedDocument<RoomBooking>;
