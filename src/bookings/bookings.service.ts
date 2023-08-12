@@ -55,7 +55,8 @@ export class BookingsService {
     return `This action updates a #${id} booking`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} booking`;
+  async remove(id: number) {
+    const booking = await this.bookingModel.findByIdAndDelete(id);
+    return booking;
   }
 }
