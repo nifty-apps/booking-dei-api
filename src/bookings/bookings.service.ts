@@ -19,6 +19,8 @@ export class BookingsService {
       contact: createBookingInput.contact,
       hotel: createBookingInput.hotel,
       paymentStatus: createBookingInput.paymentStatus,
+      totalBookingRent: createBookingInput.totalBookingRent,
+      discount: createBookingInput.discount,
     });
 
     createBookingInput.roomBookings.forEach(async (roomBooking) => {
@@ -29,8 +31,9 @@ export class BookingsService {
 
       const roomBookingRent =
         roomRent + extraBedCost + extraBreakfastCost - discount;
-      booking.totalBookingRent += roomBookingRent;
-      console.log(booking.totalBookingRent);
+      // TODO: Add roomBookingRent from frontend
+      // booking.totalBookingRent = booking.totalBookingRent || 0;
+      // booking.totalBookingRent += roomBookingRent;
 
       await this.roomBookingModel.create({
         room: roomBooking.room,
