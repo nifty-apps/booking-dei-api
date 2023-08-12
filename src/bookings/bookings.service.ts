@@ -22,6 +22,13 @@ export class BookingsService {
     });
 
     createBookingInput.roomBookings.forEach(async (roomBooking) => {
+      const roomRent = roomBooking.rent;
+      const extraBedCost = roomBooking.extraBed ? 500 : 0;
+      const extraBreakfastCost = roomBooking.extraBreakfast ? 500 : 0;
+      const discount = roomBooking.discount || 0;
+
+      const roomBookingRent = roomRent + extraBedCost + extraBreakfastCost - discount;
+
       await this.roomBookingModel.create({
         room: roomBooking.room,
         booking: booking._id,
@@ -29,6 +36,7 @@ export class BookingsService {
         status: roomBooking.status,
         checkIn: roomBooking.checkIn,
         checkOut: roomBooking.checkOut,
+        rent: roomBookingRent,
       });
     });
 
