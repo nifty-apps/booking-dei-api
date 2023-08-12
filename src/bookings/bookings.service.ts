@@ -29,6 +29,7 @@ export class BookingsService {
 
       const roomBookingRent =
         roomRent + extraBedCost + extraBreakfastCost - discount;
+      booking.totalBookingRent = booking.totalBookingRent || 0;
       booking.totalBookingRent += roomBookingRent;
       console.log(booking.totalBookingRent);
 
