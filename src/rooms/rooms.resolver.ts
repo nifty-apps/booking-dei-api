@@ -14,7 +14,6 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateRoomInput } from './dto/create-room.input';
 import { UpdateRoomInput } from './dto/update-room.input';
 import { RoomsService } from './rooms.service';
-import { RoomTypesService } from './roomtypes.service';
 import { Room } from './schemas/room.schema';
 import { RoomType } from './schemas/roomtype.schema';
 
@@ -23,7 +22,6 @@ import { RoomType } from './schemas/roomtype.schema';
 export class RoomsResolver {
   constructor(
     private readonly roomsService: RoomsService,
-    private readonly roomTypesService: RoomTypesService,
   ) {}
 
   @Mutation(() => Room)
