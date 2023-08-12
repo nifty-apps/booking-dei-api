@@ -22,6 +22,15 @@ export class BookingsService {
     });
 
     createBookingInput.roomBookings.forEach(async (roomBooking) => {
+      const roomRent = roomBooking.rent;
+      const extraBedCost = roomBooking.extraBed ? 500 : 0;
+      const extraBreakfastCost = roomBooking.extraBreakfast ? 500 : 0;
+      const discount = roomBooking.discount || 0;
+
+      const roomBookingRent =
+        roomRent + extraBedCost + extraBreakfastCost - discount;
+      console.log(roomBookingRent);
+
       await this.roomBookingModel.create({
         room: roomBooking.room,
         booking: booking._id,
@@ -29,6 +38,10 @@ export class BookingsService {
         status: roomBooking.status,
         checkIn: roomBooking.checkIn,
         checkOut: roomBooking.checkOut,
+        rent: roomBookingRent,
+        discount,
+        extraBed: roomBooking.extraBed,
+        extraBreakfast: roomBooking.extraBreakfast,
       });
     });
 
@@ -47,7 +60,8 @@ export class BookingsService {
     return `This action updates a #${id} booking`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} booking`;
+  async remove(id: number) {
+    const booking = await this.bookingModel.findByIdAndDelete(id);
+    return booking;
   }
 }
