@@ -29,7 +29,8 @@ export class BookingsService {
 
       const roomBookingRent =
         roomRent + extraBedCost + extraBreakfastCost - discount;
-      console.log(roomBookingRent);
+      booking.totalBookingRent += roomBookingRent;
+      console.log(booking.totalBookingRent);
 
       await this.roomBookingModel.create({
         room: roomBooking.room,

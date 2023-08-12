@@ -34,6 +34,12 @@ type Booking {
   """Hotel where the booking were generated"""
   hotel: ID!
 
+  """Rent for the booking"""
+  totalBookingRent: Float
+
+  """Discount for the booking"""
+  discount: Float
+
   """Payment status of the booking"""
   paymentStatus: PaymentStatus!
 }
@@ -378,6 +384,12 @@ input CreateBookingInput {
   """Room bookings of the booking"""
   roomBookings: [CreateRoomBookingInput!]!
 
+  """Total Rent for the booking"""
+  totalBookingRent: Float
+
+  """Discount for the booking"""
+  discount: Float
+
   """Payment status of the customer"""
   paymentStatus: PaymentStatus
 }
@@ -396,7 +408,7 @@ input CreateRoomBookingInput {
   rent: Float!
 
   """Discount for the booking"""
-  discount: Float!
+  discount: Float
 
   """Extra bed for the booking"""
   extraBed: Boolean!
@@ -417,6 +429,12 @@ input UpdateBookingInput {
 
   """Room bookings of the booking"""
   roomBookings: [CreateRoomBookingInput!]
+
+  """Total Rent for the booking"""
+  totalBookingRent: Float
+
+  """Discount for the booking"""
+  discount: Float
 
   """Payment status of the customer"""
   paymentStatus: PaymentStatus

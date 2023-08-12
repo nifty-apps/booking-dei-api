@@ -27,9 +27,9 @@ export class CreateRoomBookingInput {
   @IsNumber()
   rent: number;
 
-  @Field({ description: 'Discount for the booking' })
+  @Field({ nullable: true, description: 'Discount for the booking' })
   @IsNumber()
-  discount: number;
+  discount?: number;
 
   @Field({ description: 'Extra bed for the booking' })
   @IsBoolean()
