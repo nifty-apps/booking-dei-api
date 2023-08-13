@@ -1,0 +1,49 @@
+import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { CreateRoomInput } from './create-room.input';
+
+@InputType()
+export class UpdateRoomInput extends PartialType(CreateRoomInput) {
+  @Field(() => Int)
+  id: number;
+
+  @Field({ nullable: true })
+  number?: string;
+
+  @Field({ nullable: true })
+  rent?: number;
+
+  @Field({ nullable: true })
+  type?: string;
+}
+```
+
+src/rooms/rooms.service.ts
+type Mutation {
+  createHotel(createHotelInput: CreateHotelInput!): Hotel!
+  updateHotel(updateHotelInput: UpdateHotelInput!): Hotel!
+  removeHotel(id: Int!): Hotel!
+  createRoom(createRoomInput: CreateRoomInput!): Room!
+  updateRoom(updateRoomInput: UpdateRoomInput!): Room!
+  removeRoom(id: Int!): Room!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createContact(createContactInput: CreateContactInput!): Contact!
+  updateContact(updateContactInput: UpdateContactInput!): Contact!
+  removeContact(id: Int!): Contact!
+  createBooking(createBookingInput: CreateBookingInput!): Booking!
+  updateBooking(updateBookingInput: UpdateBookingInput!): Booking!
+  removeBooking(id: Int!): Booking!
+  createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
+  updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
+  removeTransaction(id: Int!): Transaction!
+  login(phone: String!, password: String!): LoginResponseDto!
+}
+
+input UpdateRoomInput {
+  id: Int!
+  number: String
+  rent: Float
+  type: String
+}
+
