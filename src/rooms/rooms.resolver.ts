@@ -42,9 +42,12 @@ export class RoomsResolver {
     return this.roomsService.findOne(id);
   }
 
-  @Mutation(() => Room)
-  updateRoom(@Args('updateRoomInput') updateRoomInput: UpdateRoomInput) {
-    return this.roomsService.update(updateRoomInput.id, updateRoomInput);
+  @Mutation(() => RoomType)
+  async updateRoom(
+    @Args('id', { type: () => ID }) id: ObjectId,
+    @Args('updateRoomInput') updateRoomInput: UpdateRoomInput,
+  ) {
+    return this.roomsService.update(id, updateRoomInput);
   }
 
   @Mutation(() => Room)
