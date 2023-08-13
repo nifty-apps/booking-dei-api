@@ -1,5 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsDate, IsEnum, IsMongoId, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsMongoId, IsNumber } from 'class-validator';
 import { ObjectId } from 'mongoose';
 import {
   TransactionCategory,
@@ -13,20 +13,24 @@ export class CreateTransactionInput {
     description: 'Unique identifier for the booking',
     nullable: true,
   })
-  @IsMongoId()
   booking?: ObjectId;
 
   @Field(() => ID, { description: 'Contact who made the booking' })
   @IsMongoId()
   contact: ObjectId;
 
-  @Field(() => ID, { description: 'Hotel where the transaction was made' })
+  @Field(() => ID, {
+    description: 'Hotel where the transaction was made',
+  })
   @IsMongoId()
   hotel: ObjectId;
 
   @Field({ description: 'Date of the transaction' })
   @IsDate()
   date: Date;
+
+  @Field({ nullable: true, description: 'Is the transaction deleted' })
+  deletedAt?: Date;
 
   @Field(() => TransactionCategory, {
     description: 'Type of the transaction',
@@ -50,7 +54,6 @@ export class CreateTransactionInput {
   method?: TransactionMethod;
 
   @Field({ nullable: true, description: 'Description of the transaction' })
-  @IsString()
   description?: string;
 
   @Field({ description: 'Amount of the transaction' })
