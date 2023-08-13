@@ -39,25 +39,33 @@ export class TransactionsResolver {
     return this.transactionsService.findAll();
   }
 
+  @Query(() => [Transaction], { name: 'activeTransactions' })
+  findActiveTransactions() {
+    return this.transactionsService.findActiveTransactions();
+  }
+
   @Query(() => Transaction, { name: 'transaction' })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.transactionsService.findOne(id);
   }
 
   @Mutation(() => Transaction)
-  updateTransaction(
+  async updateTransaction(
+    @Args('id', { type: () => ID }) id: ObjectId,
     @Args('updateTransactionInput')
     updateTransactionInput: UpdateTransactionInput,
   ) {
-    return this.transactionsService.update(
-      updateTransactionInput.id,
-      updateTransactionInput,
-    );
+    return this.transactionsService.update(id, updateTransactionInput);
   }
 
   @Mutation(() => Transaction)
-  removeTransaction(@Args('id', { type: () => Int }) id: number) {
+  removeTransaction(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.transactionsService.remove(id);
+  }
+
+  @Mutation(() => Transaction)
+  softDeleteTransaction(@Args('id', { type: () => ID }) id: ObjectId) {
+    return this.transactionsService.softDelete(id);
   }
 
   @Query(() => [Transaction], { name: 'transactionsByDateRange' })
@@ -65,11 +73,14 @@ export class TransactionsResolver {
     @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
     @Args('startDate') startDate: Date,
     @Args('endDate') endDate: Date,
+    @Args('includeDeleted', { type: () => Boolean, nullable: true })
+    includeDeleted: boolean,
   ) {
     return this.transactionsService.findByDateRange(
       hotelId,
       new Date(startDate),
       new Date(endDate),
+      includeDeleted,
     );
   }
 
