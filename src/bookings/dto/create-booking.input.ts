@@ -27,6 +27,10 @@ export class CreateBookingInput {
   @IsNumber()
   discount?: number;
 
+  @Field({ nullable: true, description: 'Total Due for the booking' })
+  @IsNumber()
+  due?: number;
+
   @Field(() => PaymentStatus, {
     nullable: true, //TODO: for drop down enum in postman
     description: 'Payment status of the customer',

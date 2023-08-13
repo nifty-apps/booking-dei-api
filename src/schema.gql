@@ -40,6 +40,9 @@ type Booking {
   """Discount for the booking"""
   discount: Float
 
+  """Total Due for the booking"""
+  due: Float
+
   """Payment status of the booking"""
   paymentStatus: PaymentStatus!
 }
@@ -390,6 +393,9 @@ input CreateBookingInput {
   """Discount for the booking"""
   discount: Float
 
+  """Total Due for the booking"""
+  due: Float
+
   """Payment status of the customer"""
   paymentStatus: PaymentStatus
 }
@@ -435,6 +441,9 @@ input UpdateBookingInput {
 
   """Discount for the booking"""
   discount: Float
+
+  """Total Due for the booking"""
+  due: Float
 
   """Payment status of the customer"""
   paymentStatus: PaymentStatus
