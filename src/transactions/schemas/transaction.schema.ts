@@ -59,8 +59,9 @@ export class Transaction {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Booking',
+    default: null,
   })
-  booking?: ObjectId;
+  booking: ObjectId | null;
 
   @Field(() => ID, { description: 'Hotel where the transaction were made' })
   @Prop({
@@ -73,6 +74,10 @@ export class Transaction {
   @Field({ description: 'Date of the transaction' })
   @Prop({ required: true })
   date: Date;
+
+  @Field({ nullable: true, description: 'Is the transaction deleted' })
+  @Prop({ type: Date, default: null })
+  deletedAt: Date | null;
 
   @Field(() => TransactionCategory, {
     nullable: true,

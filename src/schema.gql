@@ -183,6 +183,9 @@ type Transaction {
   """Date of the transaction"""
   date: DateTime!
 
+  """Is the transaction deleted"""
+  deletedAt: DateTime
+
   """Type of the transaction"""
   category: TransactionType
 
@@ -235,8 +238,9 @@ type Query {
   booking(id: Int!): Booking!
   roomBookings(roomBookingFilter: RoomBookingFilter!): [RoomBooking!]!
   transactions: [Transaction!]!
+  activeTransactions: [Transaction!]!
   transaction(id: Int!): Transaction!
-  transactionsByDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!): [Transaction!]!
+  transactionsByDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!, includeDeleted: Boolean): [Transaction!]!
 }
 
 input RoomBookingFilter {
@@ -262,8 +266,9 @@ type Mutation {
   updateBooking(updateBookingInput: UpdateBookingInput!): Booking!
   removeBooking(id: Int!): Booking!
   createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
-  updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
-  removeTransaction(id: Int!): Transaction!
+  updateTransaction(id: ID!, updateTransactionInput: UpdateTransactionInput!): Transaction!
+  removeTransaction(id: ID!): Transaction!
+  softDeleteTransaction(id: ID!): Transaction!
   login(phone: String!, password: String!): LoginResponseDto!
 }
 
@@ -463,6 +468,9 @@ input CreateTransactionInput {
   """Date of the transaction"""
   date: DateTime!
 
+  """Is the transaction deleted"""
+  deletedAt: DateTime
+
   """Type of the transaction"""
   category: TransactionType
 
@@ -492,6 +500,9 @@ input UpdateTransactionInput {
   """Date of the transaction"""
   date: DateTime
 
+  """Is the transaction deleted"""
+  deletedAt: DateTime
+
   """Type of the transaction"""
   category: TransactionType
 
@@ -506,5 +517,5 @@ input UpdateTransactionInput {
 
   """Amount of the transaction"""
   amount: Float
-  id: Int!
+  id: ID!
 }

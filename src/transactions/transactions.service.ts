@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { CreateTransactionInput } from './dto/create-transaction.input';
@@ -20,25 +20,55 @@ export class TransactionsService {
     return this.transactionModel.find();
   }
 
+  findActiveTransactions() {
+    return this.transactionModel.find({ deletedAt: null });
+  }
+
   findOne(id: number) {
     return this.transactionModel.findById(id);
   }
 
-  update(id: number, updateTransactionInput: UpdateTransactionInput) {
-    return `This action updates a #${id} transaction`;
+  update(id: ObjectId, updateTransactionInput: UpdateTransactionInput) {
+    return this.transactionModel.findByIdAndUpdate(
+      id,
+      { $set: updateTransactionInput },
+      { new: true },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  remove(id: ObjectId) {
+    return this.transactionModel.findByIdAndDelete(id);
   }
 
-  async findByDateRange(hotelId: ObjectId, startDate: Date, endDate: Date) {
-    return this.transactionModel.find({
+  async softDelete(id: ObjectId): Promise<Transaction> {
+    const transaction = await this.transactionModel.findById(id);
+
+    if (!transaction) {
+      throw new NotFoundException(`Transaction with ID ${id} not found`);
+    }
+
+    transaction.deletedAt = new Date();
+
+    return transaction.save();
+  }
+
+  async findByDateRange(
+    hotelId: ObjectId,
+    startDate: Date,
+    endDate: Date,
+    includeDeleted = false, // Default to not include deleted transactions
+  ) {
+    const query: any = {
       hotel: hotelId,
       date: {
         $gte: startDate,
         $lte: endDate,
       },
-    });
+    };
+
+    if (!includeDeleted) {
+      query.deletedAt = null;
+    }
+    return this.transactionModel.find(query);
   }
 }
