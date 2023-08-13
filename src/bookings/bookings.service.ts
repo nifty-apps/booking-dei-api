@@ -21,6 +21,7 @@ export class BookingsService {
       paymentStatus: createBookingInput.paymentStatus,
       totalBookingRent: createBookingInput.totalBookingRent,
       discount: createBookingInput.discount,
+      due: createBookingInput.due,
     });
 
     createBookingInput.roomBookings.forEach(async (roomBooking) => {
@@ -28,7 +29,7 @@ export class BookingsService {
       const extraBedCost = roomBooking.extraBed ? 500 : 0;
       const extraBreakfastCost = roomBooking.extraBreakfast ? 500 : 0;
       const discount = roomBooking.discount || 0;
-
+      //TODO: Remove the calculation from backend for roomBookingRent
       const roomBookingRent =
         roomRent + extraBedCost + extraBreakfastCost - discount;
       // TODO: Add roomBookingRent from frontend

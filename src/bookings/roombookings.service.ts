@@ -36,9 +36,9 @@ export class RoomBookingService {
     return this.roomBookingModel.find(filter);
   }
 
-  // update(id: number, updateRoomInput: UpdateRoomInput) {
-  //   return `This action updates a #${id} room`;
-  // }
+  update(id: number, updateRoomInput: UpdateRoomInput) {
+    return `This action updates a #${id} room`;
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} room`;

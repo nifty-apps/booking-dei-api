@@ -44,6 +44,10 @@ export class Booking {
   @Prop()
   discount?: number;
 
+  @Field({ nullable: true, description: 'Total Due for the booking' })
+  @Prop()
+  due?: number;
+
   @Field(() => PaymentStatus, { description: 'Payment status of the booking' })
   @Prop({ required: true, enum: PaymentStatus })
   paymentStatus: PaymentStatus;
