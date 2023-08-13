@@ -1,5 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsString } from 'class-validator';
+import { IsMongoId, IsString } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
 @InputType()
@@ -9,8 +9,10 @@ export class CreateRoomInput {
   number: string;
 
   @Field(() => ID, { description: 'Hotel where the room is located' })
+  @IsMongoId()
   hotel: ObjectId;
 
-  @Field(() => ID, { description: 'Type of the room' })
-  type: ObjectId;
+  @Field(() => ID, { nullable: true, description: 'Type of the room' })
+  @IsMongoId()
+  type?: ObjectId;
 }

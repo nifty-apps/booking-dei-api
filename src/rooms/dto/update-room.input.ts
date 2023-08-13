@@ -1,11 +1,13 @@
-import { Field, InputType, Int, PartialType } from '@nestjs/graphql';
-import { IsNumber } from 'class-validator';
+import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
+import { IsMongoId } from 'class-validator';
+import { ObjectId } from 'mongodb';
 import { CreateRoomInput } from './create-room.input';
 
 @InputType()
 export class UpdateRoomInput extends PartialType(CreateRoomInput) {
-  @Field(() => Int)
-  id: number;
+  @Field(() => ID) // Decorate the field with the appropriate type
+  @IsMongoId() // Validate the field is a MongoDB ObjectId
+  id: ObjectId;
 
   // @Field({ description: 'Room Number' })
   // @IsNumber()

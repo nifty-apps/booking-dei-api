@@ -21,8 +21,13 @@ export class RoomsService {
     return this.roomModel.findById(id);
   }
 
-  update(id: number, updateRoomInput: UpdateRoomInput) {
-    return `This action updates a #${id} room`;
+  async update(id: ObjectId, updateRoomInput: UpdateRoomInput) {
+    const updatedRoom = await this.roomModel.findByIdAndUpdate(
+      id,
+      { $set: updateRoomInput },
+      { new: true },
+    );
+    return updatedRoom;
   }
 
   remove(id: number) {
