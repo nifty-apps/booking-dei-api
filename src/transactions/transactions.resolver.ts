@@ -2,7 +2,6 @@ import { UseGuards } from '@nestjs/common';
 import {
   Args,
   ID,
-  Int,
   Mutation,
   Parent,
   Query,
@@ -14,6 +13,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ContactsService } from 'src/contacts/contacts.service';
 import { Contact } from 'src/contacts/schemas/contact.schema';
 import { CreateTransactionInput } from './dto/create-transaction.input';
+import { TransactionFilter } from './dto/transactionfilter.input';
 import { UpdateTransactionInput } from './dto/update-transaction.input';
 import { Transaction } from './schemas/transaction.schema';
 import { TransactionsService } from './transactions.service';
@@ -45,8 +45,15 @@ export class TransactionsResolver {
   }
 
   @Query(() => Transaction, { name: 'transaction' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.transactionsService.findOne(id);
+  }
+
+  @Query(() => [Transaction], { name: 'transactionByFilter' })
+  findTransaction(
+    @Args('transactionFilter') transactionFilter: TransactionFilter,
+  ) {
+    return this.transactionsService.findTransaction(transactionFilter);
   }
 
   @Mutation(() => Transaction)
