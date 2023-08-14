@@ -149,6 +149,9 @@ type Room {
 
   """Number or name of the room"""
   number: String!
+
+  """Room status"""
+  status: String!
   type: RoomType!
 
   """Hotel where the room is located"""
@@ -303,6 +306,9 @@ input CreateRoomInput {
   """Number or name of the room"""
   number: String!
 
+  """Room status"""
+  status: String! = "available"
+
   """Hotel where the room is located"""
   hotel: ID!
 
@@ -313,6 +319,9 @@ input CreateRoomInput {
 input UpdateRoomInput {
   """Number or name of the room"""
   number: String
+
+  """Room status"""
+  status: String = "available"
 
   """Hotel where the room is located"""
   hotel: ID
