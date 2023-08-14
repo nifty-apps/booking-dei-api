@@ -46,6 +46,19 @@ export class TransactionsService {
     if (transactionfilter.endDate) {
       filter['date'] = { $lte: transactionfilter.endDate };
     }
+    if (transactionfilter.deletedAt) {
+      filter['deletedAt'] = transactionfilter.deletedAt;
+    }
+    if (transactionfilter.method) {
+      filter['method'] = transactionfilter.method;
+    }
+    if (transactionfilter.category) {
+      filter['category'] = transactionfilter.category;
+    }
+    if (transactionfilter.subCategory) {
+      filter['subCategory'] = transactionfilter.subCategory;
+    }
+
     return this.transactionModel.find(filter);
   }
 

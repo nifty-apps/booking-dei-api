@@ -9,24 +9,33 @@ import { Contact } from './schemas/contact.schema';
 export class ContactsResolver {
   constructor(private readonly contactsService: ContactsService) {}
 
-  @Mutation(() => Contact)
+  @Mutation(() => Contact, {
+    name: 'createContact',
+    description: 'Create contact',
+  })
   createContact(
     @Args('createContactInput') createContactInput: CreateContactInput,
   ) {
     return this.contactsService.create(createContactInput);
   }
 
-  @Query(() => [Contact], { name: 'contacts' })
+  @Query(() => [Contact], {
+    name: 'contacts',
+    description: 'Find all contacts',
+  })
   findAll() {
     return this.contactsService.findAll();
   }
 
-  @Query(() => Contact, { name: 'contact' })
+  @Query(() => Contact, { name: 'contact', description: 'Find contact by ID' })
   findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.contactsService.findOne(id);
   }
 
-  @Mutation(() => Contact)
+  @Mutation(() => Contact, {
+    name: 'updateContact',
+    description: 'Update contact',
+  })
   updateContact(
     @Args('updateContactInput') updateContactInput: UpdateContactInput,
   ) {
@@ -36,7 +45,10 @@ export class ContactsResolver {
     );
   }
 
-  @Mutation(() => Contact)
+  @Mutation(() => Contact, {
+    name: 'removeContact',
+    description: 'Delete contact by ID',
+  })
   removeContact(@Args('id', { type: () => Int }) id: number) {
     return this.contactsService.remove(id);
   }

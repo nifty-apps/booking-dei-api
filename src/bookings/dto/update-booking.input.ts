@@ -1,8 +1,9 @@
+import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
+import { ObjectId } from 'mongoose';
 import { CreateBookingInput } from './create-booking.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateBookingInput extends PartialType(CreateBookingInput) {
-  @Field(() => Int)
-  id: number;
+  @Field(() => ID, { description: 'Booking ID' })
+  id: ObjectId;
 }
