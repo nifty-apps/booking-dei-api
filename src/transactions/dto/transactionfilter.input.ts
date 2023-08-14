@@ -1,5 +1,10 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
+import {
+  TransactionCategory,
+  TransactionMethod,
+  TransactionSubCategory,
+} from '../schemas/transaction.schema';
 
 @InputType()
 export class TransactionFilter {
@@ -20,4 +25,13 @@ export class TransactionFilter {
 
   @Field(() => Date, { nullable: true })
   deletedAt?: Date;
+
+  @Field(() => TransactionMethod, { nullable: true })
+  method?: TransactionMethod;
+
+  @Field(() => TransactionCategory, { nullable: true })
+  category?: TransactionCategory;
+
+  @Field(() => TransactionSubCategory, { nullable: true })
+  subCategory?: TransactionSubCategory;
 }
