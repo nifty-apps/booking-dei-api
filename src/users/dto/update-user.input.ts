@@ -1,8 +1,9 @@
+import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
+import { ObjectId } from 'mongoose';
 import { CreateUserInput } from './create-user.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateUserInput extends PartialType(CreateUserInput) {
-  @Field(() => Int)
-  id: number;
+  @Field(() => ID, { description: 'User ID' })
+  id: ObjectId;
 }

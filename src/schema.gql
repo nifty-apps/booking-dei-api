@@ -233,17 +233,41 @@ type Query {
   hotel(id: Int!): Hotel!
   rooms: [Room!]!
   room(id: ID!): Room!
+
+  """Get all users"""
   users: [User!]!
+
+  """Get user by ID"""
   user(phone: String!): User!
+
+  """Find all contacts"""
   contacts: [Contact!]!
+
+  """Find contact by ID"""
   contact(id: ID!): Contact!
+
+  """Find all bookings"""
   bookings: [Booking!]!
+
+  """Find booking by ID"""
   booking(id: Int!): Booking!
+
+  """Find all room bookings"""
   roomBookings(roomBookingFilter: RoomBookingFilter!): [RoomBooking!]!
+
+  """Find all transactions"""
   transactions: [Transaction!]!
+
+  """Find all active transactions"""
   activeTransactions: [Transaction!]!
+
+  """Find transaction by ID"""
   transaction(id: ID!): Transaction!
+
+  """Find Transactions by filter(s)"""
   transactionByFilter(transactionFilter: TransactionFilter!): [Transaction!]!
+
+  """Find transactions by date range"""
   transactionsByDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!, includeDeleted: Boolean): [Transaction!]!
 }
 
@@ -260,6 +284,9 @@ input TransactionFilter {
   startDate: DateTime
   endDate: DateTime
   deletedAt: DateTime
+  method: TransactionMethod
+  category: TransactionType
+  subCategory: TransactionSubCategory
 }
 
 type Mutation {
@@ -269,18 +296,50 @@ type Mutation {
   createRoom(createRoomInput: CreateRoomInput!): Room!
   updateRoom(id: ID!, updateRoomInput: UpdateRoomInput!): RoomType!
   removeRoom(id: Int!): Room!
+
+  """Create user"""
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+
+  """Update user"""
+  updateUser(id: ID!, updateUserInput: UpdateUserInput!): User!
+
+  """Delete user by ID"""
+  removeUser(id: ID!): User!
+
+  """Create contact"""
   createContact(createContactInput: CreateContactInput!): Contact!
+
+  """Update contact"""
   updateContact(updateContactInput: UpdateContactInput!): Contact!
+
+  """Delete contact by ID"""
   removeContact(id: Int!): Contact!
+
+  """Create booking"""
   createBooking(createBookingInput: CreateBookingInput!): Booking!
-  updateBooking(updateBookingInput: UpdateBookingInput!): Booking!
+
+  """Update booking"""
+  updateBooking(id: ID!, updateBookingInput: UpdateBookingInput!): Booking!
+
+  """Delete booking by ID"""
   removeBooking(id: Int!): Booking!
+
+  """Update room booking by ID"""
+  updateRoomBooking(id: ID!, updateRoomBookingInput: UpdateRoomBookingInput!): [RoomBooking!]!
+
+  """Delete room booking by ID"""
+  removeRoomBooking(id: ID!): RoomBooking!
+
+  """Create transaction"""
   createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
+
+  """Update transaction"""
   updateTransaction(id: ID!, updateTransactionInput: UpdateTransactionInput!): Transaction!
+
+  """Delete transaction by ID"""
   removeTransaction(id: ID!): Transaction!
+
+  """Soft delete transaction by ID"""
   softDeleteTransaction(id: ID!): Transaction!
   login(phone: String!, password: String!): LoginResponseDto!
 }
@@ -357,7 +416,9 @@ input UpdateUserInput {
 
   """Password of the user"""
   password: String
-  id: Int!
+
+  """User ID"""
+  id: ID!
 }
 
 input CreateContactInput {
@@ -471,7 +532,38 @@ input UpdateBookingInput {
 
   """Payment status of the customer"""
   paymentStatus: PaymentStatus
-  id: Int!
+
+  """Booking ID"""
+  id: ID!
+}
+
+input UpdateRoomBookingInput {
+  """Room where the booking were generated"""
+  room: ID
+
+  """Check-in date of the Room booking"""
+  checkIn: DateTime
+
+  """Check-out date of the Room booking"""
+  checkOut: DateTime
+
+  """Room rent for the booking"""
+  rent: Float
+
+  """Discount for the booking"""
+  discount: Float
+
+  """Extra bed for the booking"""
+  extraBed: Boolean
+
+  """Extra breakfast for the booking"""
+  extraBreakfast: Boolean
+
+  """Room booking status of the Room booking"""
+  status: RoomBookingStatus
+
+  """Room Booking ID"""
+  id: ID!
 }
 
 input CreateTransactionInput {

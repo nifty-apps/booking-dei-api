@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { RoomBookingFilter } from './dto/roombookingfilter.input';
+import { UpdateRoomBookingInput } from './dto/update-roombooking.input';
 import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
 @Injectable()
@@ -10,9 +11,6 @@ export class RoomBookingService {
     @InjectModel(RoomBooking.name)
     private roomBookingModel: Model<RoomBookingDocument>,
   ) {}
-  // create(createRoomInput: CreateRoomInput) {
-  //   return this.roomTypeModel.create(createRoomInput);
-  // }
 
   findAll() {
     return this.roomBookingModel.find();
@@ -36,11 +34,13 @@ export class RoomBookingService {
     return this.roomBookingModel.find(filter);
   }
 
-  // update(id: number, updateRoomInput: UpdateRoomInput) {
-  //   return `This action updates a #${id} room`;
-  // }
+  update(id: ObjectId, updateRoomBookingInput: UpdateRoomBookingInput) {
+    return this.roomBookingModel.findByIdAndUpdate(id, updateRoomBookingInput, {
+      new: true,
+    });
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} room`;
-  // }
+  remove(id: ObjectId) {
+    return this.roomBookingModel.findByIdAndDelete(id);
+  }
 }

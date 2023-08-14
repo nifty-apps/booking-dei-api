@@ -26,7 +26,10 @@ export class TransactionsResolver {
     private readonly contactsService: ContactsService,
   ) {}
 
-  @Mutation(() => Transaction)
+  @Mutation(() => Transaction, {
+    name: 'createTransaction',
+    description: 'Create transaction',
+  })
   createTransaction(
     @Args('createTransactionInput')
     createTransactionInput: CreateTransactionInput,
@@ -34,29 +37,44 @@ export class TransactionsResolver {
     return this.transactionsService.create(createTransactionInput);
   }
 
-  @Query(() => [Transaction], { name: 'transactions' })
+  @Query(() => [Transaction], {
+    name: 'transactions',
+    description: 'Find all transactions',
+  })
   findAll() {
     return this.transactionsService.findAll();
   }
 
-  @Query(() => [Transaction], { name: 'activeTransactions' })
+  @Query(() => [Transaction], {
+    name: 'activeTransactions',
+    description: 'Find all active transactions',
+  })
   findActiveTransactions() {
     return this.transactionsService.findActiveTransactions();
   }
 
-  @Query(() => Transaction, { name: 'transaction' })
+  @Query(() => Transaction, {
+    name: 'transaction',
+    description: 'Find transaction by ID',
+  })
   findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.transactionsService.findOne(id);
   }
 
-  @Query(() => [Transaction], { name: 'transactionByFilter' })
+  @Query(() => [Transaction], {
+    name: 'transactionByFilter',
+    description: 'Find Transactions by filter(s)',
+  })
   findTransaction(
     @Args('transactionFilter') transactionFilter: TransactionFilter,
   ) {
     return this.transactionsService.findTransaction(transactionFilter);
   }
 
-  @Mutation(() => Transaction)
+  @Mutation(() => Transaction, {
+    name: 'updateTransaction',
+    description: 'Update transaction',
+  })
   async updateTransaction(
     @Args('id', { type: () => ID }) id: ObjectId,
     @Args('updateTransactionInput')
@@ -65,17 +83,26 @@ export class TransactionsResolver {
     return this.transactionsService.update(id, updateTransactionInput);
   }
 
-  @Mutation(() => Transaction)
+  @Mutation(() => Transaction, {
+    name: 'removeTransaction',
+    description: 'Delete transaction by ID',
+  })
   removeTransaction(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.transactionsService.remove(id);
   }
 
-  @Mutation(() => Transaction)
+  @Mutation(() => Transaction, {
+    name: 'softDeleteTransaction',
+    description: 'Soft delete transaction by ID',
+  })
   softDeleteTransaction(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.transactionsService.softDelete(id);
   }
 
-  @Query(() => [Transaction], { name: 'transactionsByDateRange' })
+  @Query(() => [Transaction], {
+    name: 'transactionsByDateRange',
+    description: 'Find transactions by date range',
+  })
   findByDateRange(
     @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
     @Args('startDate') startDate: Date,
