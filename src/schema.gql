@@ -149,6 +149,9 @@ type Room {
 
   """Number or name of the room"""
   number: String!
+
+  """Room status"""
+  status: String!
   type: RoomType!
 
   """Hotel where the room is located"""
@@ -239,7 +242,8 @@ type Query {
   roomBookings(roomBookingFilter: RoomBookingFilter!): [RoomBooking!]!
   transactions: [Transaction!]!
   activeTransactions: [Transaction!]!
-  transaction(id: Int!): Transaction!
+  transaction(id: ID!): Transaction!
+  transactionByFilter(transactionFilter: TransactionFilter!): [Transaction!]!
   transactionsByDateRange(hotelId: ID!, startDate: DateTime!, endDate: DateTime!, includeDeleted: Boolean): [Transaction!]!
 }
 
@@ -247,6 +251,15 @@ input RoomBookingFilter {
   hotelId: ID!
   startDate: DateTime
   endDate: DateTime
+}
+
+input TransactionFilter {
+  hotelId: ID
+  contactId: ID
+  bookingId: ID
+  startDate: DateTime
+  endDate: DateTime
+  deletedAt: DateTime
 }
 
 type Mutation {
@@ -293,6 +306,9 @@ input CreateRoomInput {
   """Number or name of the room"""
   number: String!
 
+  """Room status"""
+  status: String! = "available"
+
   """Hotel where the room is located"""
   hotel: ID!
 
@@ -303,6 +319,9 @@ input CreateRoomInput {
 input UpdateRoomInput {
   """Number or name of the room"""
   number: String
+
+  """Room status"""
+  status: String = "available"
 
   """Hotel where the room is located"""
   hotel: ID
