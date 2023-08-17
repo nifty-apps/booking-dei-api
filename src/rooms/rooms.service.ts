@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { CreateRoomInput } from './dto/create-room.input';
-import { UpdateRoomInput } from './dto/update-room.input';
+import { CreateRoomInput, UpdateRoomInput } from './dto/room.input';
 import { Room, RoomDocument } from './schemas/room.schema';
 
 @Injectable()
@@ -104,7 +103,7 @@ export class RoomsService {
     return updatedRoom;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} room`;
+  remove(id: ObjectId) {
+    return this.roomModel.findByIdAndDelete(id);
   }
 }

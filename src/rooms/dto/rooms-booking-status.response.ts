@@ -40,7 +40,7 @@ export class RoomBookingsOverviewResponse {
   _id: ObjectId;
 
   @Field()
-  number: number;
+  number: string;
 
   @Field(() => RoomTypeDetails)
   type: RoomTypeDetails;

@@ -1,15 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ParseObjectIdPipe } from 'src/common/pipes/parse-object-id.pipe';
-import { CreateRoomInput } from './dto/create-room.input';
+import { CreateRoomInput, UpdateRoomInput } from './dto/room.input';
 import { RoomBookingsOverviewResponse } from './dto/rooms-booking-status.response';
-import { UpdateRoomInput } from './dto/update-room.input';
 import { RoomsService } from './rooms.service';
 import { RoomTypesService } from './roomtypes.service';
 import { Room } from './schemas/room.schema';
-import { RoomType } from './schemas/roomtype.schema';
 
 @Resolver(() => Room)
 @UseGuards(JwtAuthGuard)
@@ -49,16 +47,13 @@ export class RoomsResolver {
     return this.roomsService.findOne(id);
   }
 
-  @Mutation(() => RoomType)
-  async updateRoom(
-    @Args('id', { type: () => ID }) id: ObjectId,
-    @Args('updateRoomInput') updateRoomInput: UpdateRoomInput,
-  ) {
-    return this.roomsService.update(id, updateRoomInput);
+  @Mutation(() => Room)
+  async updateRoom(@Args('updateRoomInput') updateRoomInput: UpdateRoomInput) {
+    return this.roomsService.update(updateRoomInput._id, updateRoomInput);
   }
 
   @Mutation(() => Room)
-  removeRoom(@Args('id', { type: () => Int }) id: number) {
+  removeRoom(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: ObjectId) {
     return this.roomsService.remove(id);
   }
 }
