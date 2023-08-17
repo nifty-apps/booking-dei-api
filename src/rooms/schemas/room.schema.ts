@@ -12,9 +12,9 @@ export class Room {
   @Prop({ required: true })
   number: string;
 
-  @Field({ description: 'Room status' })
-  @Prop({ default: 'available' })
-  status: string | 'available';
+  @Field({ nullable: true, description: 'Rent of the room' })
+  @Prop()
+  originalRent?: number;
 
   @Field(() => ID, { description: 'Type of the room' })
   @Prop({

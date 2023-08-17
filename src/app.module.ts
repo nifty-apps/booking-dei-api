@@ -3,9 +3,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { join } from 'path';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { ContactsModule } from './contacts/contacts.module';
@@ -27,7 +24,7 @@ import { UsersModule } from './users/users.module';
     GraphQLModule.forRoot({
       driver: ApolloDriver,
       path: '/api',
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: true,
     }),
     HotelsModule,
     RoomsModule,
@@ -37,7 +34,5 @@ import { UsersModule } from './users/users.module';
     TransactionsModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

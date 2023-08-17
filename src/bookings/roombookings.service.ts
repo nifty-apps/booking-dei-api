@@ -25,11 +25,11 @@ export class RoomBookingService {
     if (roomBookingFilter.hotelId) {
       filter['hotel'] = roomBookingFilter.hotelId;
     }
-    if (roomBookingFilter.startDate) {
-      filter['checkIn'] = { $gte: roomBookingFilter.startDate };
+    if (roomBookingFilter.checkIn) {
+      filter['checkIn'] = { $gte: roomBookingFilter.checkIn };
     }
-    if (roomBookingFilter.endDate) {
-      filter['checkOut'] = { $lte: roomBookingFilter.endDate };
+    if (roomBookingFilter.checkOut) {
+      filter['checkOut'] = { $lte: roomBookingFilter.checkOut };
     }
     return this.roomBookingModel.find(filter);
   }
