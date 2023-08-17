@@ -9,8 +9,8 @@ export class RoomBookingFilter {
   hotelId: ObjectId;
 
   @Field(() => Date, { nullable: true })
-  startDate?: Date;
+  checkIn?: Date;
 
   @Field(() => Date, { nullable: true })
-  endDate?: Date;
+  checkOut?: Date;
 }

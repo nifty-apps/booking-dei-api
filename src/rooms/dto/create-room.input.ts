@@ -8,10 +8,6 @@ export class CreateRoomInput {
   @IsString()
   number: string;
 
-  @Field({ description: 'Room status', defaultValue: 'available' })
-  @IsString()
-  status: string | 'available';
-
   @Field(() => ID, { description: 'Hotel where the room is located' })
   @IsMongoId()
   hotel: ObjectId;
