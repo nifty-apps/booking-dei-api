@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ParseObjectIdPipe } from 'src/common/pipes/parse-object-id.pipe';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './schemas/user.schema';
@@ -23,8 +24,8 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user', description: 'Get user by ID' })
-  findOne(@Args('phone', { type: () => String }) phone: string) {
-    return this.usersService.findOne(phone);
+  findOne(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: ObjectId) {
+    return this.usersService.findOne({ _id: id });
   }
 
   @Mutation(() => User, { name: 'updateUser', description: 'Update user' })
