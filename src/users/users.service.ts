@@ -16,8 +16,8 @@ export class UsersService {
     return this.userModel.find();
   }
 
-  findOne(phone: string) {
-    return this.userModel.findOne({ phone: phone });
+  findOne(query: Partial<User>) {
+    return this.userModel.findOne(query);
   }
 
   update(id: ObjectId, updateUserInput: UpdateUserInput) {
