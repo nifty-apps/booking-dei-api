@@ -35,7 +35,7 @@ class RoomBookingDetails {
 }
 
 @ObjectType()
-export class RoomBookingsOverviewResponse {
+class RoomBookingsOverview {
   @Field(() => ID)
   _id: ObjectId;
 
@@ -45,6 +45,21 @@ export class RoomBookingsOverviewResponse {
   @Field(() => RoomTypeDetails)
   type: RoomTypeDetails;
 
+  @Field()
+  floor: string;
+
+  @Field()
+  position: string;
+
   @Field(() => [RoomBookingDetails])
   bookings: RoomBookingDetails[];
+}
+
+@ObjectType({ description: 'Response for rooms by floor with bookings' })
+export class RoomsByFloorResponse {
+  @Field()
+  floor: string;
+
+  @Field(() => [RoomBookingsOverview])
+  rooms: RoomBookingsOverview[];
 }

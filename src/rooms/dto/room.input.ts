@@ -12,3 +12,10 @@ export class UpdateRoomInput extends PartialType(Room, InputType) {
   @IsMongoId()
   _id: ObjectId;
 }
+
+@InputType()
+export class RoomFilterInput extends PartialType(Room, InputType) {
+  @Field(() => ID)
+  @IsMongoId()
+  hotel: ObjectId;
+}
