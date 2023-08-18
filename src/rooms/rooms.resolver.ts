@@ -3,8 +3,12 @@ import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ParseObjectIdPipe } from 'src/common/pipes/parse-object-id.pipe';
-import { CreateRoomInput, UpdateRoomInput } from './dto/room.input';
-import { RoomBookingsOverviewResponse } from './dto/rooms-booking-status.response';
+import {
+  CreateRoomInput,
+  RoomFilterInput,
+  UpdateRoomInput,
+} from './dto/room.input';
+import { RoomsByFloorResponse } from './dto/rooms-booking-status.response';
 import { RoomsService } from './rooms.service';
 import { RoomTypesService } from './roomtypes.service';
 import { Room } from './schemas/room.schema';
@@ -23,13 +27,11 @@ export class RoomsResolver {
   }
 
   @Query(() => [Room], { name: 'rooms' })
-  findAll(
-    @Args('hotel', { type: () => ID }, ParseObjectIdPipe) hotel: ObjectId,
-  ) {
-    return this.roomsService.findAll(hotel);
+  findAll(@Args('findByFilter') findByFilter: RoomFilterInput) {
+    return this.roomsService.findAll(findByFilter);
   }
 
-  @Query(() => [RoomBookingsOverviewResponse], { name: 'roomBookingsOverview' })
+  @Query(() => [RoomsByFloorResponse], { name: 'roomsByFloor' })
   findAllWithBookingStatus(
     @Args('hotel', { type: () => ID }, ParseObjectIdPipe) hotel: ObjectId,
     @Args('startDate', { type: () => Date }) startDate: Date,

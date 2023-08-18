@@ -12,7 +12,15 @@ export class Room {
   @Prop({ required: true })
   number: string;
 
-  @Field(() => ID, { description: 'Type of the room' })
+  @Field({ description: 'Floor where the room is located' })
+  @Prop({ required: true })
+  floor: string;
+
+  @Field({ description: 'Position of the room' })
+  @Prop({ required: true })
+  position: string;
+
+  @Field(() => ID, { nullable: true, description: 'Type of the room' })
   @Prop({
     required: false,
     type: mongoose.Schema.Types.ObjectId,
