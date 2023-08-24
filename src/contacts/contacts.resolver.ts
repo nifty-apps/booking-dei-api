@@ -1,11 +1,17 @@
-import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ContactsService } from './contacts.service';
-import { CreateContactInput } from './dto/create-contact.input';
-import { UpdateContactInput } from './dto/update-contact.input';
+import {
+  ContactFilterInput,
+  CreateContactInput,
+  UpdateContactInput,
+} from './dto/contact.input';
 import { Contact } from './schemas/contact.schema';
 
 @Resolver(() => Contact)
+@UseGuards(JwtAuthGuard)
 export class ContactsResolver {
   constructor(private readonly contactsService: ContactsService) {}
 
@@ -19,12 +25,9 @@ export class ContactsResolver {
     return this.contactsService.create(createContactInput);
   }
 
-  @Query(() => [Contact], {
-    name: 'contacts',
-    description: 'Find all contacts',
-  })
-  findAll() {
-    return this.contactsService.findAll();
+  @Query(() => [Contact], { name: 'contacts' })
+  findAll(@Args('filter') filter: ContactFilterInput) {
+    return this.contactsService.findAll(filter);
   }
 
   @Query(() => Contact, { name: 'contact', description: 'Find contact by ID' })
@@ -40,7 +43,7 @@ export class ContactsResolver {
     @Args('updateContactInput') updateContactInput: UpdateContactInput,
   ) {
     return this.contactsService.update(
-      updateContactInput.id,
+      updateContactInput._id,
       updateContactInput,
     );
   }
@@ -49,7 +52,7 @@ export class ContactsResolver {
     name: 'removeContact',
     description: 'Delete contact by ID',
   })
-  removeContact(@Args('id', { type: () => Int }) id: number) {
+  removeContact(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.contactsService.remove(id);
   }
 }
