@@ -1,6 +1,12 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsMongoId, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsMongoId,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 
 export enum ContactTypes {
@@ -9,10 +15,21 @@ export enum ContactTypes {
   VENDOR = 'VENDOR',
 }
 
+export enum ContactIdTypes {
+  NID = 'NID',
+  PASSPORT = 'PASSPORT',
+  DRIVING_LICENSE = 'DRIVING_LICENSE',
+}
+
 // Register the enum with GraphQL
 registerEnumType(ContactTypes, {
-  name: 'ContactTypes', // this one is mandatory
-  description: 'The type of the contact', // this one is optional
+  name: 'ContactTypes',
+  description: 'The type of the contact',
+});
+
+registerEnumType(ContactIdTypes, {
+  name: 'ContactIdTypes',
+  description: 'The type of the contact ID',
 });
 
 @ObjectType()
@@ -28,15 +45,30 @@ export class Contact {
   name: string;
 
   @Field({ description: 'Phone number of the contact' })
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
+  @IsString()
   phone: string;
 
-  @Field({ nullable: true, description: 'NID of the contact' })
-  @Prop({ type: Number, unique: true })
-  nid?: number;
+  @Field(() => ContactIdTypes, {
+    nullable: true,
+    description: 'ID type of the contact',
+  })
+  @Prop({ type: String, enum: ContactIdTypes, nullable: true })
+  @IsString()
+  @IsOptional()
+  @IsEnum(ContactIdTypes)
+  idType?: ContactIdTypes;
+
+  @Field({ nullable: true, description: 'ID number of the contact' })
+  @Prop({ type: Number, nullable: true })
+  @IsNumber()
+  @IsOptional()
+  idNo?: number;
 
   @Field({ nullable: true, description: 'Address of the contact' })
   @Prop()
+  @IsString()
+  @IsOptional()
   address?: string;
 
   @Field(() => ID, { description: 'Hotel where the contact visited' })
@@ -49,6 +81,7 @@ export class Contact {
 
   @Field(() => ContactTypes, { description: 'Type of the contact' })
   @Prop({ required: true, enum: ContactTypes })
+  @IsEnum(ContactTypes)
   type: ContactTypes;
 }
 
