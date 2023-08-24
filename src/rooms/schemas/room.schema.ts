@@ -20,13 +20,12 @@ export class Room {
   @Prop({ required: true })
   position: string;
 
-  @Field(() => ID, { nullable: true, description: 'Type of the room' })
+  @Field(() => ID, { description: 'Type of the room' })
   @Prop({
-    required: false,
     type: mongoose.Schema.Types.ObjectId,
     ref: 'RoomType',
   })
-  type?: ObjectId;
+  type: ObjectId;
 
   @Field(() => ID, { description: 'Hotel where the room is located' })
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' })
