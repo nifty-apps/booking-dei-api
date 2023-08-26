@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { CreateTransactionInput } from './dto/create-transaction.input';
 import { TransactionFilter } from './dto/transaction-filter.input';
-import { UpdateTransactionInput } from './dto/update-transaction.input';
+import {
+  CreateTransactionInput,
+  UpdateTransactionInput,
+} from './dto/transaction.input';
 import { Transaction, TransactionDocument } from './schemas/transaction.schema';
 
 @Injectable()
