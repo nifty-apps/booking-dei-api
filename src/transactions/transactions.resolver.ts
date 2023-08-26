@@ -12,9 +12,11 @@ import { ObjectId } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ContactsService } from 'src/contacts/contacts.service';
 import { Contact } from 'src/contacts/schemas/contact.schema';
-import { CreateTransactionInput } from './dto/create-transaction.input';
 import { TransactionFilter } from './dto/transaction-filter.input';
-import { UpdateTransactionInput } from './dto/update-transaction.input';
+import {
+  CreateTransactionInput,
+  UpdateTransactionInput,
+} from './dto/transaction.input';
 import { Transaction } from './schemas/transaction.schema';
 import { TransactionsService } from './transactions.service';
 
