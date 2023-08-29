@@ -30,7 +30,6 @@ export class User {
   @Prop({ required: true, unique: true })
   phone: string;
 
-  @Field({ description: 'Password of the user' })
   @Prop({ required: true })
   password: string;
 
