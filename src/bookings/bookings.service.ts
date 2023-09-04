@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { CreateBookingInput } from './dto/create-booking.input';
 import { UpdateBookingInput } from './dto/update-booking.input';
 import { Booking, BookingDocument } from './schemas/booking.schema';
@@ -57,8 +57,8 @@ export class BookingsService {
     return this.bookingModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} booking`;
+  findOne(filter: Partial<Booking>) {
+    return this.bookingModel.findById(filter);
   }
 
   update(id: ObjectId, updateBookingInput: UpdateBookingInput) {
@@ -69,7 +69,7 @@ export class BookingsService {
     );
   }
 
-  async remove(id: number) {
+  async remove(id: Types.ObjectId) {
     const booking = await this.bookingModel.findByIdAndDelete(id);
     return booking;
   }

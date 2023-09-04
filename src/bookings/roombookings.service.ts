@@ -21,16 +21,16 @@ export class RoomBookingService {
   }
 
   async findRoomBookings(roomBookingFilter: RoomBookingFilter) {
-    const filter = {};
-    if (roomBookingFilter.hotelId) {
-      filter['hotel'] = roomBookingFilter.hotelId;
-    }
+    const filter: any = {
+      ...roomBookingFilter,
+    };
     if (roomBookingFilter.checkIn) {
       filter['checkIn'] = { $gte: roomBookingFilter.checkIn };
     }
     if (roomBookingFilter.checkOut) {
       filter['checkOut'] = { $lte: roomBookingFilter.checkOut };
     }
+
     return this.roomBookingModel.find(filter);
   }
 
