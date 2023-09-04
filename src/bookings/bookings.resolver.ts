@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ObjectId, Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { BookingsService } from './bookings.service';
 import { CreateBookingInput } from './dto/create-booking.input';
@@ -38,8 +38,8 @@ export class BookingsResolver {
   }
 
   @Query(() => Booking, { name: 'booking', description: 'Find booking by ID' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.bookingsService.findOne(id);
+  findOne(@Args('id', { type: () => ID }) id: ObjectId) {
+    return this.bookingsService.findOne({ _id: id });
   }
 
   @Mutation(() => Booking, {
@@ -57,7 +57,7 @@ export class BookingsResolver {
     name: 'removeBooking',
     description: 'Delete booking by ID',
   })
-  removeBooking(@Args('id', { type: () => Int }) id: number) {
+  removeBooking(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.bookingsService.remove(id);
   }
 

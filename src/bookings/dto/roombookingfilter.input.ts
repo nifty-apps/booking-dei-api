@@ -1,16 +1,11 @@
-import { Field, ID, InputType } from '@nestjs/graphql';
+import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
 import { IsMongoId } from 'class-validator';
 import { ObjectId } from 'mongoose';
+import { RoomBooking } from '../schemas/roombooking.schema';
 
 @InputType()
-export class RoomBookingFilter {
+export class RoomBookingFilter extends PartialType(RoomBooking, InputType) {
   @Field(() => ID, { nullable: false })
   @IsMongoId()
-  hotelId: ObjectId;
-
-  @Field(() => Date, { nullable: true })
-  checkIn?: Date;
-
-  @Field(() => Date, { nullable: true })
-  checkOut?: Date;
+  hotel: ObjectId;
 }
