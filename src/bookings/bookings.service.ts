@@ -2,20 +2,19 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { CreateBookingInput, UpdateBookingInput } from './dto/booking.input';
+import { RoomBookingService } from './roombookings.service';
 import { Booking, BookingDocument } from './schemas/booking.schema';
-import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
 @Injectable()
 export class BookingsService {
   constructor(
     @InjectModel(Booking.name) private bookingModel: Model<BookingDocument>,
-    @InjectModel(RoomBooking.name)
-    private roomBookingModel: Model<RoomBookingDocument>,
+    private readonly roomBookingService: RoomBookingService,
   ) {}
 
   async create(createBookingInput: CreateBookingInput) {
     const booking = await this.bookingModel.create({
-      contact: createBookingInput.customer,
+      customer: createBookingInput.customer,
       hotel: createBookingInput.hotel,
       paymentStatus: createBookingInput.paymentStatus,
     });
@@ -32,17 +31,11 @@ export class BookingsService {
       // booking.totalBookingRent = booking.totalBookingRent || 0;
       // booking.totalBookingRent += roomBookingRent;
 
-      await this.roomBookingModel.create({
-        room: roomBooking.room,
+      await this.roomBookingService.create({
+        ...roomBooking,
+        rent: roomBookingRent,
         booking: booking._id,
         hotel: createBookingInput.hotel,
-        status: roomBooking.status,
-        checkIn: roomBooking.checkIn,
-        checkOut: roomBooking.checkOut,
-        rent: roomBookingRent,
-        discount,
-        extraBed: roomBooking.extraBed,
-        extraBreakfast: roomBooking.extraBreakfast,
       });
     });
 

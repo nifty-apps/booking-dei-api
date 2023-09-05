@@ -12,6 +12,7 @@ import { RoomsByFloorResponse } from './dto/rooms-booking-status.response';
 import { RoomsService } from './rooms.service';
 import { RoomTypesService } from './roomtypes.service';
 import { Room } from './schemas/room.schema';
+import { RoomType } from './schemas/roomtype.schema';
 
 @Resolver(() => Room)
 @UseGuards(JwtAuthGuard)
@@ -47,6 +48,11 @@ export class RoomsResolver {
   @Query(() => Room, { name: 'room' })
   findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.roomsService.findOne(id);
+  }
+
+  @Query(() => RoomType, { name: 'roomType' })
+  findRoomType(@Args('id', { type: () => ID }) id: ObjectId) {
+    return this.roomTypesService.findOne(id);
   }
 
   @Mutation(() => Room)

@@ -30,6 +30,15 @@ export class RoomBooking {
   @IsMongoId()
   _id: ObjectId;
 
+  @Field(() => ID, { description: 'Room where the booking were generated' })
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Room',
+  })
+  @IsMongoId()
+  room: ObjectId;
+
   @Field({ description: 'Check-in date of the Room booking' })
   @Prop({ required: true })
   @IsDate()
@@ -60,15 +69,6 @@ export class RoomBooking {
   @Prop({ required: true, default: false })
   @IsBoolean()
   extraBreakfast: boolean;
-
-  @Field(() => ID, { description: 'Room where the booking were generated' })
-  @Prop({
-    required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Room',
-  })
-  @IsMongoId()
-  room: ObjectId;
 
   @Field(() => ID, { description: 'Unique identifier for the booking' })
   @Prop({
