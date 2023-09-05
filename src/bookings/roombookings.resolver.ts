@@ -6,6 +6,7 @@ import {
   CreateRoomBookingInput,
   UpdateRoomBookingInput,
 } from './dto/roombooking.input';
+import { RoomBookingResponse } from './dto/roombooking.response';
 import { RoomBookingFilter } from './dto/roombookingfilter.input';
 import { RoomBookingService } from './roombookings.service';
 import { Booking } from './schemas/booking.schema';
@@ -27,24 +28,13 @@ export class RoomBookingsResolver {
     return this.roomBookingsService.create(createRoomBookingInput);
   }
 
-  @Query(() => [RoomBooking], {
+  @Query(() => [RoomBookingResponse], {
     name: 'roomBookings',
-    description: 'Find all room bookings',
   })
   findRoomBookings(
     @Args('roomBookingFilter') roomBookingFilter: RoomBookingFilter,
   ) {
     return this.roomBookingsService.findRoomBookings(roomBookingFilter);
-  }
-
-  @Query(() => RoomBooking, {
-    name: 'roomBooking',
-    description: 'Find One room bookings by ID',
-  })
-  findRoomBooking(
-    @Args('roomBookingFilter') roomBookingFilter: RoomBookingFilter,
-  ) {
-    return this.roomBookingsService.findOne(roomBookingFilter._id);
   }
 
   @Mutation(() => RoomBooking, {

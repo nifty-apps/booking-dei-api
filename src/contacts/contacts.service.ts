@@ -27,7 +27,6 @@ export class ContactsService {
     const contact = await this.contactModel.findOne(query);
 
     if (contact) {
-      console.log(contact);
       let errorMessage: string = null;
       if (
         createContactInput.idNo &&

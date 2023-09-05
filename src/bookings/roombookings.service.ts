@@ -26,10 +26,6 @@ export class RoomBookingService {
     return this.roomBookingModel.find();
   }
 
-  findOne(id: ObjectId) {
-    return this.roomBookingModel.findById(id);
-  }
-
   async findRoomBookings(roomBookingFilter: RoomBookingFilter) {
     const filter: any = {
       ...roomBookingFilter,
@@ -41,7 +37,14 @@ export class RoomBookingService {
       filter['checkOut'] = { $lte: roomBookingFilter.checkOut };
     }
 
-    return this.roomBookingModel.find(filter);
+    return this.roomBookingModel.find(filter).populate({
+      path: 'room',
+      select: 'number',
+      populate: {
+        path: 'type',
+        select: 'title',
+      },
+    });
   }
 
   update(id: ObjectId, updateRoomBookingInput: UpdateRoomBookingInput) {
