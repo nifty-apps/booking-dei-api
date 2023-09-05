@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BookingsResolver } from './bookings.resolver';
 import { BookingsService } from './bookings.service';
+import { RoomBookingsResolver } from './roombookings.resolver';
 import { RoomBookingService } from './roombookings.service';
 import { Booking, BookingSchema } from './schemas/booking.schema';
 import { RoomBooking, RoomBookingSchema } from './schemas/roombooking.schema';
@@ -12,6 +13,11 @@ import { RoomBooking, RoomBookingSchema } from './schemas/roombooking.schema';
       { name: RoomBooking.name, schema: RoomBookingSchema },
     ]),
   ],
-  providers: [BookingsResolver, BookingsService, RoomBookingService],
+  providers: [
+    BookingsResolver,
+    RoomBookingsResolver,
+    BookingsService,
+    RoomBookingService,
+  ],
 })
 export class BookingsModule {}
