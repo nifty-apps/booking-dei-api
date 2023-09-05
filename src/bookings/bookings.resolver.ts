@@ -5,7 +5,6 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { BookingsService } from './bookings.service';
 import { CreateBookingInput, UpdateBookingInput } from './dto/booking.input';
 import { Booking } from './schemas/booking.schema';
-import { ParseObjectIdPipe } from 'src/common/pipes/parse-object-id.pipe';
 
 @Resolver(() => Booking)
 @UseGuards(JwtAuthGuard)
@@ -14,7 +13,6 @@ export class BookingsResolver {
 
   @Mutation(() => Booking, {
     name: 'createBooking',
-    description: 'Create booking',
   })
   createBooking(
     @Args('createBookingInput') createBookingInput: CreateBookingInput,
@@ -24,7 +22,6 @@ export class BookingsResolver {
 
   @Query(() => [Booking], {
     name: 'bookings',
-    description: 'Find all bookings',
   })
   findAll() {
     return this.bookingsService.findAll();
@@ -32,15 +29,13 @@ export class BookingsResolver {
 
   @Query(() => Booking, {
     name: 'booking',
-    description: 'Find booking by ID',
   })
-  findOne(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: ObjectId) {
+  findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.bookingsService.findOne(id);
   }
 
   @Mutation(() => Booking, {
     name: 'updateBooking',
-    description: 'Update booking',
   })
   async updateBooking(
     @Args('updateBookingInput') updateBookingInput: UpdateBookingInput,

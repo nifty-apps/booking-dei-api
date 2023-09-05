@@ -22,14 +22,14 @@ export class Booking {
   @IsMongoId()
   _id: ObjectId;
 
-  @Field(() => ID, { description: 'Contact who made the booking' })
+  @Field(() => ID, { description: 'Customer who made the booking' })
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Contact',
   })
   @IsMongoId()
-  contact: ObjectId;
+  customer: ObjectId;
 
   @Field(() => ID, { description: 'Hotel where the booking were generated' })
   @Prop({

@@ -15,7 +15,7 @@ export class BookingsService {
 
   async create(createBookingInput: CreateBookingInput) {
     const booking = await this.bookingModel.create({
-      contact: createBookingInput.contact,
+      contact: createBookingInput.customer,
       hotel: createBookingInput.hotel,
       paymentStatus: createBookingInput.paymentStatus,
     });
@@ -54,23 +54,27 @@ export class BookingsService {
   }
 
   findOne(id: ObjectId) {
-    return this.bookingModel.findById(id);
+    const booking = this.bookingModel.findById(id);
+    return booking;
   }
 
-  update(id: ObjectId, updateBookingInput: UpdateBookingInput) {
-    const bookingUpdate = this.bookingModel.findByIdAndUpdate(
+  async update(id: ObjectId, updateBookingInput: UpdateBookingInput) {
+    const booking = await this.bookingModel.findByIdAndUpdate(
       id,
       { $set: updateBookingInput },
       { new: true },
     );
-    if (!bookingUpdate) {
+    if (!booking) {
       throw new BadRequestException('Booking not found');
     }
-    return bookingUpdate;
+    return booking;
   }
 
-  remove(id: ObjectId) {
-    const booking = this.bookingModel.findByIdAndDelete(id);
+  async remove(id: ObjectId) {
+    const booking = await this.bookingModel.findByIdAndDelete(id);
+    if (!booking) {
+      throw new BadRequestException('Booking not found');
+    }
     return booking;
   }
 }
