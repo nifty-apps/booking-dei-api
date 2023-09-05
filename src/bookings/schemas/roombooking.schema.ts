@@ -1,6 +1,13 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsBoolean, IsDate, IsMongoId, IsNumber } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEnum,
+  IsMongoId,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 
 export enum RoomBookingStatus {
@@ -41,6 +48,7 @@ export class RoomBooking {
   @Field({ nullable: true, description: 'Discount for the booking' })
   @Prop()
   @IsNumber()
+  @IsOptional()
   discount?: number;
 
   @Field({ description: 'Extra bed for the booking' })
@@ -59,6 +67,7 @@ export class RoomBooking {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Room',
   })
+  @IsMongoId()
   room: ObjectId;
 
   @Field(() => ID, { description: 'Unique identifier for the booking' })
@@ -67,6 +76,7 @@ export class RoomBooking {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Booking',
   })
+  @IsMongoId()
   booking: ObjectId;
 
   @Field(() => ID, { description: 'Hotel where the booking were generated' })
@@ -75,12 +85,14 @@ export class RoomBooking {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Hotel',
   })
+  @IsMongoId()
   hotel: ObjectId;
 
   @Field(() => RoomBookingStatus, {
     description: 'Room booking status of the booking',
   })
   @Prop({ required: true, enum: RoomBookingStatus })
+  @IsEnum(RoomBookingStatus)
   status: RoomBookingStatus;
 }
 

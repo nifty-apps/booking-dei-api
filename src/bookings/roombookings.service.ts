@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
+import {
+  CreateRoomBookingInput,
+  UpdateRoomBookingInput,
+} from './dto/roombooking.input';
 import { RoomBookingFilter } from './dto/roombookingfilter.input';
-import { UpdateRoomBookingInput } from './dto/update-roombooking.input';
 import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
 @Injectable()
@@ -11,6 +14,13 @@ export class RoomBookingService {
     @InjectModel(RoomBooking.name)
     private roomBookingModel: Model<RoomBookingDocument>,
   ) {}
+
+  async create(createRoomBookingInput: CreateRoomBookingInput) {
+    const roomBooking = await this.roomBookingModel.create({
+      ...createRoomBookingInput,
+    });
+    return roomBooking;
+  }
 
   findAll() {
     return this.roomBookingModel.find();
@@ -35,12 +45,24 @@ export class RoomBookingService {
   }
 
   update(id: ObjectId, updateRoomBookingInput: UpdateRoomBookingInput) {
-    return this.roomBookingModel.findByIdAndUpdate(id, updateRoomBookingInput, {
-      new: true,
-    });
+    const roomBookingUpdate = this.roomBookingModel.findByIdAndUpdate(
+      id,
+      updateRoomBookingInput,
+      {
+        new: true,
+      },
+    );
+    if (!roomBookingUpdate) {
+      throw new BadRequestException('Room Booking not found');
+    }
+    return roomBookingUpdate;
   }
 
   remove(id: ObjectId) {
-    return this.roomBookingModel.findByIdAndDelete(id);
+    const roomBookingDelete = this.roomBookingModel.findByIdAndDelete(id);
+    if (!roomBookingDelete) {
+      throw new BadRequestException('Room Booking not found');
+    }
+    return roomBookingDelete;
   }
 }

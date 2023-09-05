@@ -1,41 +1,24 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, OmitType, PickType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
+import { RoomBooking } from 'src/bookings/schemas/roombooking.schema';
+import { RoomType } from '../schemas/roomtype.schema';
 
 @ObjectType()
-class RoomTypeDetails {
-  @Field()
-  title: string;
-
-  @Field()
-  rent: number;
-}
+export class RoomTypeDetails extends OmitType(RoomType, ['_id', 'hotel']) {}
 
 @ObjectType()
-class RoomBookingDetails {
-  @Field(() => ID)
-  _id: ObjectId;
-
-  @Field()
-  rent: number;
-
-  @Field()
-  booking: string;
-
-  @Field()
-  discount: number;
-
-  @Field()
-  checkIn: Date;
-
-  @Field()
-  checkOut: Date;
-
-  @Field()
-  status: string;
-}
+export class RoomBookingDetails extends PickType(RoomBooking, [
+  '_id',
+  'rent',
+  'booking',
+  'discount',
+  'checkIn',
+  'checkOut',
+  'status',
+]) {}
 
 @ObjectType()
-class RoomBookingsOverview {
+export class RoomBookingsOverview {
   @Field(() => ID)
   _id: ObjectId;
 

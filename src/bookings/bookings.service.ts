@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId, Types } from 'mongoose';
-import { CreateBookingInput } from './dto/create-booking.input';
-import { UpdateBookingInput } from './dto/update-booking.input';
+import { Model, ObjectId } from 'mongoose';
+import { CreateBookingInput, UpdateBookingInput } from './dto/booking.input';
 import { Booking, BookingDocument } from './schemas/booking.schema';
 import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
@@ -19,9 +18,6 @@ export class BookingsService {
       contact: createBookingInput.contact,
       hotel: createBookingInput.hotel,
       paymentStatus: createBookingInput.paymentStatus,
-      totalBookingRent: createBookingInput.totalBookingRent,
-      discount: createBookingInput.discount,
-      due: createBookingInput.due,
     });
 
     createBookingInput.roomBookings.forEach(async (roomBooking) => {
@@ -57,20 +53,24 @@ export class BookingsService {
     return this.bookingModel.find();
   }
 
-  findOne(filter: Partial<Booking>) {
-    return this.bookingModel.findById(filter);
+  findOne(id: ObjectId) {
+    return this.bookingModel.findById(id);
   }
 
   update(id: ObjectId, updateBookingInput: UpdateBookingInput) {
-    return this.bookingModel.findByIdAndUpdate(
+    const bookingUpdate = this.bookingModel.findByIdAndUpdate(
       id,
       { $set: updateBookingInput },
       { new: true },
     );
+    if (!bookingUpdate) {
+      throw new BadRequestException('Booking not found');
+    }
+    return bookingUpdate;
   }
 
-  async remove(id: Types.ObjectId) {
-    const booking = await this.bookingModel.findByIdAndDelete(id);
+  remove(id: ObjectId) {
+    const booking = this.bookingModel.findByIdAndDelete(id);
     return booking;
   }
 }
