@@ -15,7 +15,14 @@ export class RoomBookingDetails extends PickType(RoomBooking, [
   'checkIn',
   'checkOut',
   'status',
-]) {}
+]) {
+  @Field()
+  bookingPayment: number;
+  @Field()
+  bookingRent: number;
+  @Field()
+  bookingDue: number;
+}
 
 @ObjectType()
 export class RoomBookingsOverview {
@@ -35,7 +42,7 @@ export class RoomBookingsOverview {
   position: string;
 
   @Field(() => [RoomBookingDetails])
-  bookings: RoomBookingDetails[];
+  roombookings: RoomBookingDetails[];
 }
 
 @ObjectType({ description: 'Response for rooms by floor with bookings' })

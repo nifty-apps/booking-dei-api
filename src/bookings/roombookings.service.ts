@@ -42,7 +42,7 @@ export class RoomBookingService {
       select: 'number',
       populate: {
         path: 'type',
-        select: 'title',
+        select: 'title rent',
       },
     });
   }

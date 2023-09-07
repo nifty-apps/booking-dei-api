@@ -19,5 +19,6 @@ import { RoomBooking, RoomBookingSchema } from './schemas/roombooking.schema';
     BookingsService,
     RoomBookingService,
   ],
+  exports: [BookingsService],
 })
 export class BookingsModule {}
