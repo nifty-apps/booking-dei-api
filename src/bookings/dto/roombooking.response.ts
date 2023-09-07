@@ -12,7 +12,7 @@ import { RoomType } from 'src/rooms/schemas/roomtype.schema';
 import { RoomBooking } from '../schemas/roombooking.schema';
 
 @ObjectType()
-class RoomTypeResponse extends PickType(RoomType, ['_id', 'title']) {}
+class RoomTypeResponse extends PickType(RoomType, ['_id', 'title', 'rent']) {}
 
 @ObjectType()
 class RoomResponse extends PickType(Room, ['_id', 'number']) {

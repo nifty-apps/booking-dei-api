@@ -52,12 +52,105 @@ export class RoomsService {
               },
             },
             {
+              $lookup: {
+                from: 'transactions',
+                let: {
+                  bookingId: '$booking',
+                },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $eq: ['$booking', '$$bookingId'],
+                      },
+                    },
+                  },
+                  {
+                    $group: {
+                      _id: '$booking',
+                      bookingPayment: {
+                        $sum: '$amount',
+                      },
+                    },
+                  },
+                ],
+                as: 'paymentDetails',
+              },
+            },
+            {
+              $lookup: {
+                from: 'roombookings',
+                let: {
+                  booking: '$booking',
+                },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $eq: ['$booking', '$$booking'],
+                      },
+                    },
+                  },
+                  {
+                    $group: {
+                      _id: '$booking',
+                      bookingRent: {
+                        $sum: '$rent',
+                      },
+                    },
+                  },
+                ],
+                as: 'bookingDetails',
+              },
+            },
+            {
+              $addFields: {
+                bookingPayment: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ['$paymentDetails.bookingPayment', 0],
+                    },
+                    0,
+                  ],
+                },
+                bookingRent: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ['$bookingDetails.bookingRent', 0],
+                    },
+                    0,
+                  ],
+                },
+              },
+            },
+            {
+              $addFields: {
+                bookingDue: {
+                  $cond: {
+                    if: {
+                      $eq: ['$bookingPayment', 0],
+                    },
+                    then: '$bookingRent',
+                    else: {
+                      $subtract: ['$bookingRent', '$bookingPayment'],
+                    },
+                  },
+                },
+              },
+            },
+            {
+              $project: {
+                paymentDetails: 0,
+                bookingDetails: 0,
+              },
+            },
+            {
               $sort: {
                 checkIn: 1,
               },
             },
           ],
-          as: 'bookings',
+          as: 'roombookings',
         },
       },
       {
@@ -75,31 +168,29 @@ export class RoomsService {
         $project: {
           'type._id': 0,
           'type.hotel': 0,
-          'bookings.room': 0,
-          'bookings.hotel': 0,
-          'bookings.createdAt': 0,
-          'bookings.updatedAt': 0,
-          'bookings.__v': 0,
+          'roombookings.room': 0,
+          'roombookings.hotel': 0,
+          'roombookings.createdAt': 0,
+          'roombookings.updatedAt': 0,
+          'roombookings.__v': 0,
         },
       },
       {
         $sort: {
-          position: 1, // Then by position within each floor
+          position: 1,
         },
       },
       {
         $group: {
           _id: '$floor',
-          // Group by floor
           rooms: {
             $push: {
-              // For each grouped floor, push the room info into an array
               _id: '$_id',
               number: '$number',
               type: '$type',
               floor: '$floor',
               position: '$position',
-              bookings: '$bookings',
+              roombookings: '$roombookings',
             },
           },
         },
@@ -108,7 +199,7 @@ export class RoomsService {
         $project: {
           floor: '$_id',
           rooms: 1,
-          _id: 0, // Exclude the _id field in the output
+          _id: 0,
         },
       },
       {

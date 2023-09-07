@@ -1,6 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
+import { BookingsService } from 'src/bookings/bookings.service';
 import { TransactionFilter } from './dto/transaction-filter.input';
 import {
   CreateTransactionInput,
@@ -13,9 +18,19 @@ export class TransactionsService {
   constructor(
     @InjectModel(Transaction.name)
     private transactionModel: Model<TransactionDocument>,
+    private readonly bookingService: BookingsService,
   ) {}
 
-  create(createTransactionInput: CreateTransactionInput) {
+  async create(createTransactionInput: CreateTransactionInput) {
+    const booking = await this.bookingService.findOne(
+      createTransactionInput.booking,
+    );
+    if (!booking) {
+      throw new BadRequestException(
+        `Booking with ID ${createTransactionInput.booking} not found`,
+      );
+    }
+
     return this.transactionModel.create(createTransactionInput);
   }
 
