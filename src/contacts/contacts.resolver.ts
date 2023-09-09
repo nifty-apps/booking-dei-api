@@ -17,7 +17,6 @@ export class ContactsResolver {
 
   @Mutation(() => Contact, {
     name: 'createContact',
-    description: 'Create contact',
   })
   createContact(
     @Args('createContactInput') createContactInput: CreateContactInput,
@@ -30,14 +29,13 @@ export class ContactsResolver {
     return this.contactsService.findAll(filter);
   }
 
-  @Query(() => Contact, { name: 'contact', description: 'Find contact by ID' })
+  @Query(() => Contact, { name: 'contact' })
   findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.contactsService.findOne(id);
   }
 
   @Mutation(() => Contact, {
     name: 'updateContact',
-    description: 'Update contact',
   })
   updateContact(
     @Args('updateContactInput') updateContactInput: UpdateContactInput,
@@ -50,7 +48,6 @@ export class ContactsResolver {
 
   @Mutation(() => Contact, {
     name: 'removeContact',
-    description: 'Delete contact by ID',
   })
   removeContact(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.contactsService.remove(id);
