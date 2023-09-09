@@ -18,17 +18,17 @@ export class UsersResolver {
     return this.usersService.create(createUserInput);
   }
 
-  @Query(() => [User], { name: 'users', description: 'Get all users' })
+  @Query(() => [User], { name: 'users' })
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Query(() => User, { name: 'user', description: 'Get user by ID' })
+  @Query(() => User, { name: 'user' })
   findOne(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: ObjectId) {
     return this.usersService.findOne({ _id: id });
   }
 
-  @Mutation(() => User, { name: 'updateUser', description: 'Update user' })
+  @Mutation(() => User, { name: 'updateUser' })
   updateUser(
     @Args('id', { type: () => ID }) id: ObjectId,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
@@ -38,7 +38,6 @@ export class UsersResolver {
 
   @Mutation(() => User, {
     name: 'removeUser',
-    description: 'Delete user by ID',
   })
   removeUser(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.usersService.remove(id);

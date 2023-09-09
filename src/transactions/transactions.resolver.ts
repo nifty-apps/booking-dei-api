@@ -30,7 +30,6 @@ export class TransactionsResolver {
 
   @Mutation(() => Transaction, {
     name: 'createTransaction',
-    description: 'Create transaction',
   })
   createTransaction(
     @Args('createTransactionInput')
@@ -57,7 +56,6 @@ export class TransactionsResolver {
 
   @Query(() => Transaction, {
     name: 'transaction',
-    description: 'Find transaction by ID',
   })
   findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.transactionsService.findOne(id);
@@ -65,7 +63,6 @@ export class TransactionsResolver {
 
   @Query(() => [Transaction], {
     name: 'transactionByFilter',
-    description: 'Find Transactions by filter(s)',
   })
   findTransaction(
     @Args('transactionFilter') transactionFilter: TransactionFilter,
@@ -103,7 +100,6 @@ export class TransactionsResolver {
 
   @Query(() => [Transaction], {
     name: 'transactionsByDateRange',
-    description: 'Find transactions by date range',
   })
   findByDateRange(
     @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
