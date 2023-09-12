@@ -64,6 +64,7 @@ export class BookingsService {
   }
 
   async remove(id: ObjectId) {
+    await this.roomBookingService.removeAll(id);
     const booking = await this.bookingModel.findByIdAndDelete(id);
     if (!booking) {
       throw new BadRequestException('Booking not found');

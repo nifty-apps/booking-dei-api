@@ -68,4 +68,12 @@ export class RoomBookingService {
     }
     return roomBookingDelete;
   }
+
+  async removeAll(id: ObjectId) {
+    const filter = {
+      booking: id,
+    };
+
+    return this.roomBookingModel.deleteMany(filter);
+  }
 }
