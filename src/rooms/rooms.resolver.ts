@@ -45,6 +45,19 @@ export class RoomsResolver {
     );
   }
 
+  @Query(() => [RoomsByFloorResponse], { name: 'roomBookingFinancials' })
+  findAllWithFinancials(
+    @Args('hotel', { type: () => ID }, ParseObjectIdPipe) hotel: ObjectId,
+    @Args('startDate', { type: () => Date }) startDate: Date,
+    @Args('endDate', { type: () => Date }) endDate: Date,
+  ) {
+    return this.roomsService.findRoomBookingsFinancials(
+      hotel,
+      startDate,
+      endDate,
+    );
+  }
+
   @Query(() => Room, { name: 'room' })
   findOne(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.roomsService.findOne(id);
