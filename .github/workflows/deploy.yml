@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Build application
-        run: npm run build
+        run: npm run start
         env:
           VITE_GRAPHQL_ENDPOINT: https://app.bookingdei.com/api
 
