@@ -16,12 +16,14 @@ export class RoomBookingDetails extends PickType(RoomBooking, [
   'checkOut',
   'status',
 ]) {
-  @Field()
-  bookingPayment: number;
-  @Field()
-  bookingRent: number;
-  @Field()
-  bookingDue: number;
+  @Field({ nullable: true })
+  bookingCustomer?: string;
+  @Field({ nullable: true })
+  bookingPayment?: number;
+  @Field({ nullable: true })
+  bookingRent?: number;
+  @Field({ nullable: true })
+  bookingDue?: number;
 }
 
 @ObjectType()

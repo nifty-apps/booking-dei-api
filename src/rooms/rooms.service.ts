@@ -30,118 +30,67 @@ export class RoomsService {
       {
         $lookup: {
           from: 'roombookings',
-          let: {
-            roomId: '$_id',
-          },
+          let: { roomId: '$_id' },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    {
-                      $eq: ['$room', '$$roomId'],
-                    },
-                    {
-                      $lte: ['$checkIn', new Date(endDate)],
-                    },
-                    {
-                      $gte: ['$checkOut', new Date(startDate)],
-                    },
+                    { $eq: ['$room', '$$roomId'] },
+                    { $ne: ['$status', 'CANCELLED'] },
+                    { $lte: ['$checkIn', new Date(endDate)] },
+                    { $gte: ['$checkOut', new Date(startDate)] },
                   ],
                 },
               },
             },
             {
               $lookup: {
-                from: 'transactions',
-                let: {
-                  bookingId: '$booking',
-                },
+                from: 'bookings',
+                let: { bookingId: '$booking' },
                 pipeline: [
                   {
                     $match: {
                       $expr: {
-                        $eq: ['$booking', '$$bookingId'],
+                        $eq: ['$_id', '$$bookingId'],
                       },
                     },
                   },
                   {
-                    $group: {
-                      _id: '$booking',
-                      bookingPayment: {
-                        $sum: '$amount',
-                      },
+                    $lookup: {
+                      from: 'contacts',
+                      localField: 'customer',
+                      foreignField: '_id',
+                      as: 'customerInfo',
+                    },
+                  },
+                  {
+                    $unwind: '$customerInfo',
+                  },
+                  {
+                    $project: {
+                      customerName: '$customerInfo.name',
                     },
                   },
                 ],
-                as: 'paymentDetails',
-              },
-            },
-            {
-              $lookup: {
-                from: 'roombookings',
-                let: {
-                  booking: '$booking',
-                },
-                pipeline: [
-                  {
-                    $match: {
-                      $expr: {
-                        $eq: ['$booking', '$$booking'],
-                      },
-                    },
-                  },
-                  {
-                    $group: {
-                      _id: '$booking',
-                      bookingRent: {
-                        $sum: '$rent',
-                      },
-                    },
-                  },
-                ],
-                as: 'bookingDetails',
+                as: 'customer',
               },
             },
             {
               $addFields: {
-                bookingPayment: {
+                bookingCustomer: {
                   $ifNull: [
                     {
-                      $arrayElemAt: ['$paymentDetails.bookingPayment', 0],
+                      $arrayElemAt: ['$customer.customerName', 0],
                     },
-                    0,
+                    null,
                   ],
-                },
-                bookingRent: {
-                  $ifNull: [
-                    {
-                      $arrayElemAt: ['$bookingDetails.bookingRent', 0],
-                    },
-                    0,
-                  ],
-                },
-              },
-            },
-            {
-              $addFields: {
-                bookingDue: {
-                  $cond: {
-                    if: {
-                      $eq: ['$bookingPayment', 0],
-                    },
-                    then: '$bookingRent',
-                    else: {
-                      $subtract: ['$bookingRent', '$bookingPayment'],
-                    },
-                  },
                 },
               },
             },
             {
               $project: {
-                paymentDetails: 0,
-                bookingDetails: 0,
+                customer: 0,
               },
             },
             {
@@ -205,6 +154,213 @@ export class RoomsService {
       {
         $sort: {
           floor: 1,
+        },
+      },
+    ]);
+  }
+
+  findRoomBookingsFinancials(hotel: ObjectId, startDate: Date, endDate: Date) {
+    return this.roomModel.aggregate([
+      {
+        $match: {
+          hotel: hotel,
+        },
+      },
+      {
+        $lookup: {
+          from: 'roombookings',
+          let: { roomId: '$_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$room', '$$roomId'] },
+                    { $ne: ['$status', 'CANCELLED'] },
+                    {
+                      $lte: ['$checkIn', new Date(endDate)],
+                    },
+                    {
+                      $gte: ['$checkOut', new Date(startDate)],
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              $lookup: {
+                from: 'transactions',
+                let: { bookingId: '$booking' },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $eq: ['$booking', '$$bookingId'],
+                      },
+                    },
+                  },
+                  {
+                    $group: {
+                      _id: '$booking',
+                      bookingPayment: {
+                        $sum: '$amount',
+                      },
+                    },
+                  },
+                ],
+                as: 'paymentDetails',
+              },
+            },
+            {
+              $lookup: {
+                from: 'roombookings',
+                let: { booking: '$booking' },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $eq: ['$booking', '$$booking'],
+                      },
+                    },
+                  },
+                  {
+                    $group: {
+                      _id: '$booking',
+                      bookingRent: {
+                        $sum: '$rent',
+                      },
+                    },
+                  },
+                ],
+                as: 'bookingDetails',
+              },
+            },
+            {
+              $lookup: {
+                from: 'bookings',
+                let: { bookingId: '$booking' },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $eq: ['$_id', '$$bookingId'],
+                      },
+                    },
+                  },
+                  {
+                    $lookup: {
+                      from: 'contacts',
+                      localField: 'customer',
+                      foreignField: '_id',
+                      as: 'customerInfo',
+                    },
+                  },
+                  {
+                    $unwind: '$customerInfo',
+                  },
+                  {
+                    $group: {
+                      _id: '$_id',
+                      bookingPayment: {
+                        $sum: '$amount',
+                      },
+                      customerName: {
+                        $first: '$customerInfo.name',
+                      },
+                    },
+                  },
+                ],
+                as: 'customer',
+              },
+            },
+            {
+              $addFields: {
+                bookingCustomer: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ['$customer.customerName', 0],
+                    },
+                    null,
+                  ],
+                },
+                bookingRent: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ['$bookingDetails.bookingRent', 0],
+                    },
+                    0,
+                  ],
+                },
+                bookingPayment: {
+                  $ifNull: [
+                    {
+                      $arrayElemAt: ['$paymentDetails.bookingPayment', 0],
+                    },
+                    0,
+                  ],
+                },
+              },
+            },
+            {
+              $addFields: {
+                bookingDue: {
+                  $cond: {
+                    if: {
+                      $eq: ['$bookingPayment', 0],
+                    },
+                    then: '$bookingRent',
+                    else: {
+                      $subtract: ['$bookingRent', '$bookingPayment'],
+                    },
+                  },
+                },
+              },
+            },
+            {
+              $project: {
+                paymentDetails: 0,
+                bookingDetails: 0,
+                customer: 0,
+              },
+            },
+            {
+              $sort: {
+                checkIn: 1,
+              },
+            },
+          ],
+          as: 'roombookings',
+        },
+      },
+      {
+        $lookup: {
+          from: 'roomtypes',
+          localField: 'type',
+          foreignField: '_id',
+          as: 'type',
+        },
+      },
+      {
+        $unwind: '$type',
+      },
+      {
+        $project: {
+          'type._id': 0,
+          'type.hotel': 0,
+          'roombookings.room': 0,
+          'roombookings.hotel': 0,
+          'roombookings.rent': 0,
+          'roombookings.discount': 0,
+          'roombookings.extraBed': 0,
+          'roombookings.extraBreakfast': 0,
+          'roombookings.createdAt': 0,
+          'roombookings.updatedAt': 0,
+          'roombookings.__v': 0,
+        },
+      },
+      {
+        $sort: {
+          number: 1,
         },
       },
     ]);
