@@ -8,7 +8,10 @@ import {
   RoomFilterInput,
   UpdateRoomInput,
 } from './dto/room.input';
-import { RoomsByFloorResponse } from './dto/rooms-booking-status.response';
+import {
+  RoomBookingsOverview,
+  RoomsByFloorResponse,
+} from './dto/rooms-booking-status.response';
 import { RoomsService } from './rooms.service';
 import { RoomTypesService } from './roomtypes.service';
 import { Room } from './schemas/room.schema';
@@ -45,7 +48,7 @@ export class RoomsResolver {
     );
   }
 
-  @Query(() => [RoomsByFloorResponse], { name: 'roomBookingFinancials' })
+  @Query(() => [RoomBookingsOverview], { name: 'roomBookingFinancials' })
   findAllWithFinancials(
     @Args('hotel', { type: () => ID }, ParseObjectIdPipe) hotel: ObjectId,
     @Args('startDate', { type: () => Date }) startDate: Date,

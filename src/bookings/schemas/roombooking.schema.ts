@@ -49,10 +49,10 @@ export class RoomBooking {
   @IsDate()
   checkOut: Date;
 
-  @Field({ description: 'Room rent for the booking' })
-  @Prop({ required: true })
+  @Field({ description: 'Room rent for the booking', nullable: true })
+  @Prop({ required: false })
   @IsNumber()
-  rent: number;
+  rent?: number;
 
   @Field({ nullable: true, description: 'Discount for the booking' })
   @Prop()
