@@ -14,15 +14,17 @@ export class CreateTransactionInput extends OmitType(
 export class UpdateTransactionInput extends PartialType(
   Transaction,
   InputType,
-) {
-  @Field(() => ID)
-  @IsMongoId()
-  _id: ObjectId;
-}
+) {}
 
 @InputType()
 export class TransactionFilter extends PartialType(Transaction, InputType) {
   @Field(() => ID)
   @IsMongoId()
   hotel: ObjectId;
+
+  @Field(() => Date, { nullable: true })
+  startDate?: Date;
+
+  @Field(() => Date, { nullable: true })
+  endDate?: Date;
 }
