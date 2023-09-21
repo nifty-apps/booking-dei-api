@@ -12,10 +12,10 @@ import { ObjectId } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ContactsService } from 'src/contacts/contacts.service';
 import { Contact } from 'src/contacts/schemas/contact.schema';
-import { TransactionFilter } from './dto/transaction-filter.input';
 import {
   CreateTransactionInput,
   UpdateTransactionInput,
+  TransactionFilter,
 } from './dto/transaction.input';
 import { Transaction } from './schemas/transaction.schema';
 import { TransactionsService } from './transactions.service';
@@ -40,18 +40,9 @@ export class TransactionsResolver {
 
   @Query(() => [Transaction], {
     name: 'transactions',
-    description: 'Find all transactions',
   })
   findAll() {
     return this.transactionsService.findAll();
-  }
-
-  @Query(() => [Transaction], {
-    name: 'activeTransactions',
-    description: 'Find all active transactions',
-  })
-  findActiveTransactions() {
-    return this.transactionsService.findActiveTransactions();
   }
 
   @Query(() => Transaction, {
@@ -74,17 +65,15 @@ export class TransactionsResolver {
     name: 'updateTransaction',
     description: 'Update transaction',
   })
-  async updateTransaction(
-    @Args('id', { type: () => ID }) id: ObjectId,
+  updateTransaction(
     @Args('updateTransactionInput')
     updateTransactionInput: UpdateTransactionInput,
   ) {
-    return this.transactionsService.update(id, updateTransactionInput);
+    return this.transactionsService.update(updateTransactionInput);
   }
 
   @Mutation(() => Transaction, {
     name: 'removeTransaction',
-    description: 'Delete transaction by ID',
   })
   removeTransaction(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.transactionsService.remove(id);
@@ -92,7 +81,6 @@ export class TransactionsResolver {
 
   @Mutation(() => Transaction, {
     name: 'softDeleteTransaction',
-    description: 'Soft delete transaction by ID',
   })
   softDeleteTransaction(@Args('id', { type: () => ID }) id: ObjectId) {
     return this.transactionsService.softDelete(id);
@@ -102,14 +90,14 @@ export class TransactionsResolver {
     name: 'transactionsByDateRange',
   })
   findByDateRange(
-    @Args('hotelId', { type: () => ID }) hotelId: ObjectId,
+    @Args('hotel', { type: () => ID }) hotel: ObjectId,
     @Args('startDate') startDate: Date,
     @Args('endDate') endDate: Date,
     @Args('includeDeleted', { type: () => Boolean, nullable: true })
     includeDeleted: boolean,
   ) {
     return this.transactionsService.findByDateRange(
-      hotelId,
+      hotel,
       new Date(startDate),
       new Date(endDate),
       includeDeleted,
