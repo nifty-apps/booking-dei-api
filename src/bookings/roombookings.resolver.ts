@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import {
   CreateRoomBookingInput,
@@ -55,7 +55,7 @@ export class RoomBookingsResolver {
     name: 'removeRoomBooking',
     description: 'Delete room booking by ID',
   })
-  removeRoomBooking(@Args('id', { type: () => ID }) id: ObjectId) {
+  removeRoomBooking(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.roomBookingsService.remove(id);
   }
 }

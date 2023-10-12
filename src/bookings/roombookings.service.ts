@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import {
   CreateRoomBookingInput,
   UpdateRoomBookingInput,
@@ -47,7 +47,7 @@ export class RoomBookingService {
     });
   }
 
-  update(id: ObjectId, updateRoomBookingInput: UpdateRoomBookingInput) {
+  update(id: Types.ObjectId, updateRoomBookingInput: UpdateRoomBookingInput) {
     const roomBookingUpdate = this.roomBookingModel.findByIdAndUpdate(
       id,
       updateRoomBookingInput,
@@ -61,7 +61,7 @@ export class RoomBookingService {
     return roomBookingUpdate;
   }
 
-  remove(id: ObjectId) {
+  remove(id: Types.ObjectId) {
     const roomBookingDelete = this.roomBookingModel.findByIdAndDelete(id);
     if (!roomBookingDelete) {
       throw new BadRequestException('Room Booking not found');
@@ -69,7 +69,7 @@ export class RoomBookingService {
     return roomBookingDelete;
   }
 
-  async removeAll(id: ObjectId) {
+  async removeAll(id: Types.ObjectId) {
     const filter = {
       booking: id,
     };

@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ContactsService } from './contacts.service';
 import {
@@ -30,7 +30,7 @@ export class ContactsResolver {
   }
 
   @Query(() => Contact, { name: 'contact' })
-  findOne(@Args('id', { type: () => ID }) id: ObjectId) {
+  findOne(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.contactsService.findOne(id);
   }
 
@@ -49,7 +49,7 @@ export class ContactsResolver {
   @Mutation(() => Contact, {
     name: 'removeContact',
   })
-  removeContact(@Args('id', { type: () => ID }) id: ObjectId) {
+  removeContact(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.contactsService.remove(id);
   }
 }

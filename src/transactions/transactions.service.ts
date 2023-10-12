@@ -4,12 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { BookingsService } from 'src/bookings/bookings.service';
 import {
   CreateTransactionInput,
-  UpdateTransactionInput,
   TransactionFilter,
+  UpdateTransactionInput,
 } from './dto/transaction.input';
 import { Transaction, TransactionDocument } from './schemas/transaction.schema';
 
@@ -21,7 +21,10 @@ export class TransactionsService {
     private readonly bookingService: BookingsService,
   ) {}
 
-  async create(createTransactionInput: CreateTransactionInput) {
+  async create(
+    createTransactionInput: CreateTransactionInput,
+    user: Types.ObjectId,
+  ) {
     const booking = await this.bookingService.findOne(
       createTransactionInput.booking,
     );
@@ -31,14 +34,14 @@ export class TransactionsService {
       );
     }
 
-    return this.transactionModel.create(createTransactionInput);
+    return this.transactionModel.create({ ...createTransactionInput, user });
   }
 
   findAll() {
     return this.transactionModel.find();
   }
 
-  findOne(id: ObjectId) {
+  findOne(id: Types.ObjectId) {
     return this.transactionModel.findById(id);
   }
 
@@ -63,11 +66,11 @@ export class TransactionsService {
     );
   }
 
-  remove(id: ObjectId) {
+  remove(id: Types.ObjectId) {
     return this.transactionModel.findByIdAndDelete(id);
   }
 
-  async removeAll(id: ObjectId) {
+  async removeAll(id: Types.ObjectId) {
     const filter = {
       booking: id,
     };
@@ -75,7 +78,7 @@ export class TransactionsService {
     return this.transactionModel.deleteMany(filter);
   }
 
-  async softDelete(id: ObjectId): Promise<Transaction> {
+  async softDelete(id: Types.ObjectId): Promise<Transaction> {
     const transaction = await this.transactionModel.findById(id);
 
     if (!transaction) {
@@ -88,7 +91,7 @@ export class TransactionsService {
   }
 
   async findByDateRange(
-    hotelId: ObjectId,
+    hotelId: Types.ObjectId,
     startDate: Date,
     endDate: Date,
     includeDeleted = false, // Default to not include deleted transactions

@@ -7,7 +7,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
+import { Hotel } from 'src/hotels/schemas/hotel.schemas';
 
 export enum ContactTypes {
   CUSTOMER = 'CUSTOMER',
@@ -37,7 +38,7 @@ registerEnumType(ContactIdTypes, {
 export class Contact {
   @Field(() => ID, { description: 'Example field (placeholder)' })
   @IsMongoId()
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
   @Field({ description: 'Name of the contact' })
   @Prop({ type: String, required: true })
@@ -74,10 +75,10 @@ export class Contact {
   @Field(() => ID, { description: 'Hotel where the contact visited' })
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Hotel',
+    type: SchemaTypes.ObjectId,
+    ref: Hotel.name,
   })
-  hotel: ObjectId;
+  hotel: Types.ObjectId;
 
   @Field(() => ContactTypes, { description: 'Type of the contact' })
   @Prop({ required: true, enum: ContactTypes })

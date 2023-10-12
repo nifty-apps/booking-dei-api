@@ -8,7 +8,10 @@ import {
   IsNumber,
   IsOptional,
 } from 'class-validator';
-import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
+import { Hotel } from 'src/hotels/schemas/hotel.schemas';
+import { Room } from 'src/rooms/schemas/room.schema';
+import { Booking } from './booking.schema';
 
 export enum RoomBookingStatus {
   BOOKED = 'BOOKED',
@@ -28,16 +31,16 @@ registerEnumType(RoomBookingStatus, {
 export class RoomBooking {
   @Field(() => ID, { description: 'Unique identifier for the room booking' })
   @IsMongoId()
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
   @Field(() => ID, { description: 'Room where the booking were generated' })
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Room',
+    type: SchemaTypes.ObjectId,
+    ref: Room.name,
   })
   @IsMongoId()
-  room: ObjectId;
+  room: Types.ObjectId;
 
   @Field({ description: 'Check-in date of the Room booking' })
   @Prop({ required: true })
@@ -73,20 +76,20 @@ export class RoomBooking {
   @Field(() => ID, { description: 'Unique identifier for the booking' })
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Booking',
+    type: SchemaTypes.ObjectId,
+    ref: Booking.name,
   })
   @IsMongoId()
-  booking: ObjectId;
+  booking: Types.ObjectId;
 
   @Field(() => ID, { description: 'Hotel where the booking were generated' })
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Hotel',
+    type: SchemaTypes.ObjectId,
+    ref: Hotel.name,
   })
   @IsMongoId()
-  hotel: ObjectId;
+  hotel: Types.ObjectId;
 
   @Field(() => RoomBookingStatus, {
     description: 'Room booking status of the booking',

@@ -6,7 +6,7 @@ import {
   PartialType,
   PickType,
 } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { Room } from 'src/rooms/schemas/room.schema';
 import { RoomType } from 'src/rooms/schemas/roomtype.schema';
 import { RoomBooking } from '../schemas/roombooking.schema';
@@ -25,7 +25,7 @@ export class RoomBookingResponse extends PartialType(
   OmitType(RoomBooking, ['room']),
 ) {
   @Field(() => ID, { description: 'Unique identifier for the room booking' })
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
   @Field(() => RoomResponse, { description: 'Type of the room' })
   room: RoomResponse;

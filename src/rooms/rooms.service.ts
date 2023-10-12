@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import {
   CreateRoomInput,
   RoomFilterInput,
@@ -20,7 +20,11 @@ export class RoomsService {
     return this.roomModel.find(query);
   }
 
-  findRoomBookingsOverview(hotel: ObjectId, startDate: Date, endDate: Date) {
+  findRoomBookingsOverview(
+    hotel: Types.ObjectId,
+    startDate: Date,
+    endDate: Date,
+  ) {
     return this.roomModel.aggregate([
       {
         $match: {
@@ -159,7 +163,11 @@ export class RoomsService {
     ]);
   }
 
-  findRoomBookingsFinancials(hotel: ObjectId, startDate: Date, endDate: Date) {
+  findRoomBookingsFinancials(
+    hotel: Types.ObjectId,
+    startDate: Date,
+    endDate: Date,
+  ) {
     return this.roomModel.aggregate([
       {
         $match: {
@@ -366,11 +374,11 @@ export class RoomsService {
     ]);
   }
 
-  findOne(id: ObjectId) {
+  findOne(id: Types.ObjectId) {
     return this.roomModel.findById(id);
   }
 
-  async update(id: ObjectId, updateRoomInput: UpdateRoomInput) {
+  async update(id: Types.ObjectId, updateRoomInput: UpdateRoomInput) {
     const updatedRoom = await this.roomModel.findByIdAndUpdate(
       id,
       { $set: updateRoomInput },
@@ -379,7 +387,7 @@ export class RoomsService {
     return updatedRoom;
   }
 
-  remove(id: ObjectId) {
+  remove(id: Types.ObjectId) {
     return this.roomModel.findByIdAndDelete(id);
   }
 }

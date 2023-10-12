@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { RoomType, RoomTypeDocument } from './schemas/roomtype.schema';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class RoomTypesService {
     return this.roomTypeModel.find();
   }
 
-  findOne(id: ObjectId) {
+  findOne(id: Types.ObjectId) {
     return this.roomTypeModel.findById(id);
   }
 

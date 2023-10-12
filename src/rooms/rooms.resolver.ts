@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ParseObjectIdPipe } from 'src/common/pipes/parse-object-id.pipe';
 import {
@@ -37,7 +37,7 @@ export class RoomsResolver {
 
   @Query(() => [RoomsByFloorResponse], { name: 'roomsByFloor' })
   findAllWithBookingStatus(
-    @Args('hotel', { type: () => ID }, ParseObjectIdPipe) hotel: ObjectId,
+    @Args('hotel', { type: () => ID }, ParseObjectIdPipe) hotel: Types.ObjectId,
     @Args('startDate', { type: () => Date }) startDate: Date,
     @Args('endDate', { type: () => Date }) endDate: Date,
   ) {
@@ -50,7 +50,7 @@ export class RoomsResolver {
 
   @Query(() => [RoomBookingsOverview], { name: 'roomBookingFinancials' })
   findAllWithFinancials(
-    @Args('hotel', { type: () => ID }, ParseObjectIdPipe) hotel: ObjectId,
+    @Args('hotel', { type: () => ID }, ParseObjectIdPipe) hotel: Types.ObjectId,
     @Args('startDate', { type: () => Date }) startDate: Date,
     @Args('endDate', { type: () => Date }) endDate: Date,
   ) {
@@ -62,12 +62,16 @@ export class RoomsResolver {
   }
 
   @Query(() => Room, { name: 'room' })
-  findOne(@Args('id', { type: () => ID }) id: ObjectId) {
+  findOne(
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: Types.ObjectId,
+  ) {
     return this.roomsService.findOne(id);
   }
 
   @Query(() => RoomType, { name: 'roomType' })
-  findRoomType(@Args('id', { type: () => ID }) id: ObjectId) {
+  findRoomType(
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: Types.ObjectId,
+  ) {
     return this.roomTypesService.findOne(id);
   }
 
@@ -77,7 +81,9 @@ export class RoomsResolver {
   }
 
   @Mutation(() => Room)
-  removeRoom(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: ObjectId) {
+  removeRoom(
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: Types.ObjectId,
+  ) {
     return this.roomsService.remove(id);
   }
 }
