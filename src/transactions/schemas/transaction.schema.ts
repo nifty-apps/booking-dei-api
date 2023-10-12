@@ -8,7 +8,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 
 export enum TransactionCategory {
   INCOME = 'INCOME',
@@ -51,38 +51,38 @@ registerEnumType(TransactionSubCategory, {
 export class Transaction {
   @Field(() => ID, { description: 'Unique identifier for the transaction' })
   @IsMongoId()
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
   @Field(() => ID, { description: 'Contact who made the booking' })
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
+    type: SchemaTypes.ObjectId,
     ref: 'Contact',
   })
   @IsMongoId()
-  contact: ObjectId;
+  contact: Types.ObjectId;
 
   @Field(() => ID, {
     nullable: true,
     description: 'Unique identifier for the booking',
   })
   @Prop({
-    type: mongoose.Schema.Types.ObjectId,
+    type: SchemaTypes.ObjectId,
     ref: 'Booking',
     default: null,
   })
   @IsMongoId()
   @IsOptional()
-  booking: ObjectId | null;
+  booking: Types.ObjectId | null;
 
   @Field(() => ID, { description: 'Hotel where the transaction were made' })
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
+    type: SchemaTypes.ObjectId,
     ref: 'Hotel',
   })
   @IsMongoId()
-  hotel: ObjectId;
+  hotel: Types.ObjectId;
 
   @Field({ description: 'Date of the transaction' })
   @Prop({ required: true })
@@ -127,6 +127,11 @@ export class Transaction {
   @Prop({ required: true })
   @IsNumber()
   amount: number;
+
+  @Field(() => ID, { description: 'Who created the transaction' })
+  @Prop({ required: true })
+  @IsMongoId()
+  user: Types.ObjectId;
 }
 
 export type TransactionDocument = HydratedDocument<Transaction>;

@@ -8,14 +8,15 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { ContactsService } from 'src/contacts/contacts.service';
 import { Contact } from 'src/contacts/schemas/contact.schema';
 import {
   CreateTransactionInput,
-  UpdateTransactionInput,
   TransactionFilter,
+  UpdateTransactionInput,
 } from './dto/transaction.input';
 import { Transaction } from './schemas/transaction.schema';
 import { TransactionsService } from './transactions.service';
@@ -34,8 +35,9 @@ export class TransactionsResolver {
   createTransaction(
     @Args('createTransactionInput')
     createTransactionInput: CreateTransactionInput,
+    @CurrentUser('_id') user: Types.ObjectId,
   ) {
-    return this.transactionsService.create(createTransactionInput);
+    return this.transactionsService.create(createTransactionInput, user);
   }
 
   @Query(() => [Transaction], {
@@ -48,7 +50,7 @@ export class TransactionsResolver {
   @Query(() => Transaction, {
     name: 'transaction',
   })
-  findOne(@Args('id', { type: () => ID }) id: ObjectId) {
+  findOne(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.transactionsService.findOne(id);
   }
 
@@ -75,14 +77,14 @@ export class TransactionsResolver {
   @Mutation(() => Transaction, {
     name: 'removeTransaction',
   })
-  removeTransaction(@Args('id', { type: () => ID }) id: ObjectId) {
+  removeTransaction(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.transactionsService.remove(id);
   }
 
   @Mutation(() => Transaction, {
     name: 'softDeleteTransaction',
   })
-  softDeleteTransaction(@Args('id', { type: () => ID }) id: ObjectId) {
+  softDeleteTransaction(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.transactionsService.softDelete(id);
   }
 
@@ -90,7 +92,7 @@ export class TransactionsResolver {
     name: 'transactionsByDateRange',
   })
   findByDateRange(
-    @Args('hotel', { type: () => ID }) hotel: ObjectId,
+    @Args('hotel', { type: () => ID }) hotel: Types.ObjectId,
     @Args('startDate') startDate: Date,
     @Args('endDate') endDate: Date,
     @Args('includeDeleted', { type: () => Boolean, nullable: true })

@@ -1,7 +1,15 @@
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Field,
+  ID,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsEnum, IsMongoId } from 'class-validator';
-import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
+import { Contact } from 'src/contacts/schemas/contact.schema';
+import { Hotel } from 'src/hotels/schemas/hotel.schemas';
 
 export enum PaymentStatus {
   UNPAID = 'UNPAID',
@@ -16,29 +24,49 @@ registerEnumType(PaymentStatus, {
 });
 
 @ObjectType()
+@InputType('GuestInput')
+@Schema()
+class Guest {
+  @Field({ description: 'Name of the guest' })
+  @Prop({ type: String, required: true })
+  name: string;
+
+  @Field({ nullable: true, description: 'Phone number of the guest' })
+  @Prop()
+  phone?: string;
+}
+
+@ObjectType()
 @Schema({ timestamps: true })
 export class Booking {
   @Field(() => ID, { description: 'Unique identifier for the booking' })
   @IsMongoId()
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
   @Field(() => ID, { description: 'Customer who made the booking' })
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Contact',
+    type: SchemaTypes.ObjectId,
+    ref: Contact.name,
   })
   @IsMongoId()
-  customer: ObjectId;
+  customer: Types.ObjectId;
+
+  @Field(() => [Guest], {
+    nullable: true,
+    description: 'Guests for the booking',
+  })
+  @Prop()
+  guests?: Guest[];
 
   @Field(() => ID, { description: 'Hotel where the booking were generated' })
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Hotel',
+    type: SchemaTypes.ObjectId,
+    ref: Hotel.name,
   })
   @IsMongoId()
-  hotel: ObjectId;
+  hotel: Types.ObjectId;
 
   @Field(() => PaymentStatus, { description: 'Payment status of the booking' })
   @Prop({ required: true, enum: PaymentStatus })

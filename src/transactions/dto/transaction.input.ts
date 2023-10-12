@@ -1,12 +1,12 @@
 import { Field, ID, InputType, OmitType, PartialType } from '@nestjs/graphql';
 import { IsMongoId } from 'class-validator';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { Transaction } from '../schemas/transaction.schema';
 
 @InputType()
 export class CreateTransactionInput extends OmitType(
   Transaction,
-  ['_id'],
+  ['_id', 'user'],
   InputType,
 ) {}
 
@@ -20,7 +20,7 @@ export class UpdateTransactionInput extends PartialType(
 export class TransactionFilter extends PartialType(Transaction, InputType) {
   @Field(() => ID)
   @IsMongoId()
-  hotel: ObjectId;
+  hotel: Types.ObjectId;
 
   @Field(() => Date, { nullable: true })
   startDate?: Date;

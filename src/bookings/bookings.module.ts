@@ -4,6 +4,7 @@ import { BookingsResolver } from './bookings.resolver';
 import { BookingsService } from './bookings.service';
 import { RoomBookingsResolver } from './roombookings.resolver';
 import { RoomBookingService } from './roombookings.service';
+import { BookingLog, BookingLogSchema } from './schemas/booking-log.schema';
 import { Booking, BookingSchema } from './schemas/booking.schema';
 import { RoomBooking, RoomBookingSchema } from './schemas/roombooking.schema';
 @Module({
@@ -11,6 +12,7 @@ import { RoomBooking, RoomBookingSchema } from './schemas/roombooking.schema';
     MongooseModule.forFeature([
       { name: Booking.name, schema: BookingSchema },
       { name: RoomBooking.name, schema: RoomBookingSchema },
+      { name: BookingLog.name, schema: BookingLogSchema },
     ]),
   ],
   providers: [

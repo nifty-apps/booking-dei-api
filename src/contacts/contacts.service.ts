@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import {
   ContactFilterInput,
   CreateContactInput,
@@ -57,17 +57,17 @@ export class ContactsService {
     return this.contactModel.find(query);
   }
 
-  findOne(id: ObjectId) {
+  findOne(id: Types.ObjectId) {
     return this.contactModel.findById(id);
   }
 
-  async update(id: ObjectId, updateContactInput: UpdateContactInput) {
+  async update(id: Types.ObjectId, updateContactInput: UpdateContactInput) {
     return this.contactModel.findByIdAndUpdate(id, updateContactInput, {
       new: true,
     });
   }
 
-  remove(id: ObjectId) {
+  remove(id: Types.ObjectId) {
     return this.contactModel.findByIdAndRemove(id);
   }
 }

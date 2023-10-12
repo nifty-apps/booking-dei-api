@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
+import { HydratedDocument, ObjectId, SchemaTypes } from 'mongoose';
 
 enum UserType {
   ADMIN = 'ADMIN',
@@ -36,7 +36,7 @@ export class User {
   @Field(() => [ID], { description: 'Hotels of the user' })
   @Prop({
     required: true,
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [SchemaTypes.ObjectId],
     ref: 'Hotel',
   })
   hotels: ObjectId[];
