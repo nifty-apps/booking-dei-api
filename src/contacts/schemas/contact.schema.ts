@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
+  IsDate,
   IsEnum,
   IsMongoId,
   IsNumber,
@@ -84,6 +85,11 @@ export class Contact {
   @Prop({ required: true, enum: ContactTypes })
   @IsEnum(ContactTypes)
   type: ContactTypes;
+
+  @Field({ nullable: true, description: 'Date of deactivation' })
+  @Prop({ default: null })
+  @IsDate()
+  detactivatedAt: Date;
 }
 
 export type ContactDocument = HydratedDocument<Contact>;

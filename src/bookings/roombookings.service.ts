@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import {
   CreateRoomBookingInput,
+  RoomBookingFilter,
   UpdateRoomBookingInput,
 } from './dto/roombooking.input';
-import { RoomBookingFilter } from './dto/roombookingfilter.input';
 import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
 
 @Injectable()

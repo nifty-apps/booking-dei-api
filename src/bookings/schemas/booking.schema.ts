@@ -43,6 +43,10 @@ export class Booking {
   @IsMongoId()
   _id: Types.ObjectId;
 
+  @Field({ nullable: true, description: 'Booking number' })
+  @Prop()
+  number: number;
+
   @Field(() => ID, { description: 'Customer who made the booking' })
   @Prop({
     required: true,

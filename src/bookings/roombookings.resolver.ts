@@ -4,10 +4,10 @@ import { Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import {
   CreateRoomBookingInput,
+  RoomBookingFilter,
   UpdateRoomBookingInput,
 } from './dto/roombooking.input';
 import { RoomBookingResponse } from './dto/roombooking.response';
-import { RoomBookingFilter } from './dto/roombookingfilter.input';
 import { RoomBookingService } from './roombookings.service';
 import { Booking } from './schemas/booking.schema';
 import { RoomBooking } from './schemas/roombooking.schema';
@@ -19,7 +19,6 @@ export class RoomBookingsResolver {
 
   @Mutation(() => RoomBooking, {
     name: 'createRoomBooking',
-    description: 'Create room booking',
   })
   createRoomBooking(
     @Args('createRoomBookingInput')
@@ -39,7 +38,6 @@ export class RoomBookingsResolver {
 
   @Mutation(() => RoomBooking, {
     name: 'updateRoomBooking',
-    description: 'Update room booking by ID',
   })
   updateRoomBooking(
     @Args('updateRoomBookingInput')
@@ -53,7 +51,6 @@ export class RoomBookingsResolver {
 
   @Mutation(() => RoomBooking, {
     name: 'removeRoomBooking',
-    description: 'Delete room booking by ID',
   })
   removeRoomBooking(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.roomBookingsService.remove(id);
