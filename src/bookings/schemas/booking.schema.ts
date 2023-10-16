@@ -2,6 +2,7 @@ import {
   Field,
   ID,
   InputType,
+  Int,
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
@@ -43,7 +44,7 @@ export class Booking {
   @IsMongoId()
   _id: Types.ObjectId;
 
-  @Field({ nullable: true, description: 'Booking number' })
+  @Field(() => Int, { nullable: true, description: 'Booking number' })
   @Prop()
   number: number;
 

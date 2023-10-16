@@ -62,10 +62,10 @@ export class Contact {
   idType?: ContactIdTypes;
 
   @Field({ nullable: true, description: 'ID number of the contact' })
-  @Prop({ type: Number, nullable: true })
-  @IsNumber()
+  @Prop({ type: String, nullable: true })
+  @IsString()
   @IsOptional()
-  idNo?: number;
+  idNo?: string;
 
   @Field({ nullable: true, description: 'Address of the contact' })
   @Prop()
