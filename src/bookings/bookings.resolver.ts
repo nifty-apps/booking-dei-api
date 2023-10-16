@@ -4,7 +4,11 @@ import { Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { BookingsService } from './bookings.service';
-import { CreateBookingInput, UpdateBookingInput } from './dto/booking.input';
+import {
+  BookingFilter,
+  CreateBookingInput,
+  UpdateBookingInput,
+} from './dto/booking.input';
 import { Booking } from './schemas/booking.schema';
 
 @Resolver(() => Booking)
@@ -25,8 +29,10 @@ export class BookingsResolver {
   @Query(() => [Booking], {
     name: 'bookings',
   })
-  findAll() {
-    return this.bookingsService.findAll();
+  findAll(
+    @Args('bookingFilter', { nullable: true }) bookingFilter: BookingFilter,
+  ) {
+    return this.bookingsService.findAll(bookingFilter);
   }
 
   @Query(() => Booking, {
@@ -52,7 +58,6 @@ export class BookingsResolver {
 
   @Mutation(() => Booking, {
     name: 'removeBooking',
-    description: 'Delete booking by ID',
   })
   removeBooking(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.bookingsService.remove(id);

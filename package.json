@@ -1,8 +1,8 @@
 {
   "name": "booking-graphql",
-  "version": "0.3.1",
-  "description": "",
-  "author": "",
+  "version": "0.4.2",
+  "description": "Booking GraphQL API",
+  "author": "Ahmad",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

@@ -1,7 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { CreateBookingInput, UpdateBookingInput } from './dto/booking.input';
+import {
+  BookingFilter,
+  CreateBookingInput,
+  UpdateBookingInput,
+} from './dto/booking.input';
 import { RoomBookingService } from './roombookings.service';
 import {
   BookingLog,
@@ -55,8 +59,8 @@ export class BookingsService {
     return booking;
   }
 
-  findAll() {
-    return this.bookingModel.find();
+  findAll(bookingFilter: BookingFilter) {
+    return this.bookingModel.find(bookingFilter);
   }
 
   findOne(id: Types.ObjectId) {
