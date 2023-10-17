@@ -24,23 +24,24 @@ export class BookingsService {
   ) {}
 
   async create(createBookingInput: CreateBookingInput, user: Types.ObjectId) {
+    const latestBooking = await this.bookingModel
+      .findOne()
+      .sort({ createdAt: -1 });
+    const bookingNumber = latestBooking
+      ? latestBooking.bookingNumber + 1
+      : 1000;
+
     const booking = await this.bookingModel.create({
       customer: createBookingInput.customer,
       hotel: createBookingInput.hotel,
       paymentStatus: createBookingInput.paymentStatus,
+      bookingNumber: bookingNumber,
     });
 
     createBookingInput.roomBookings.forEach(async (roomBooking) => {
-      const roomRent = roomBooking.rent;
-      const extraBedCost = roomBooking.extraBed ? 500 : 0;
-      const extraBreakfastCost = roomBooking.extraBreakfast ? 500 : 0;
-      const discount = roomBooking.discount || 0;
-      //TODO: Remove the calculation from backend for roomBookingRent
-      const roomBookingRent =
-        roomRent + extraBedCost + extraBreakfastCost - discount;
-      // TODO: Add roomBookingRent from frontend
-      // booking.totalBookingRent = booking.totalBookingRent || 0;
-      // booking.totalBookingRent += roomBookingRent;
+      const roomBookingRent = roomBooking.rent;
+      booking.totalBookingRent = booking.totalBookingRent || 0;
+      booking.totalBookingRent += roomBookingRent;
 
       await this.roomBookingService.create({
         ...roomBooking,
