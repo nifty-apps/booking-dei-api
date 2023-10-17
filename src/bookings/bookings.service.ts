@@ -24,10 +24,16 @@ export class BookingsService {
   ) {}
 
   async create(createBookingInput: CreateBookingInput, user: Types.ObjectId) {
+    const latestBooking = await this.bookingModel
+      .findOne()
+      .sort({ createdAt: -1 });
+    const bookingNumber = latestBooking ? latestBooking.number + 1 : 1000;
+
     const booking = await this.bookingModel.create({
       customer: createBookingInput.customer,
       hotel: createBookingInput.hotel,
       paymentStatus: createBookingInput.paymentStatus,
+      number: bookingNumber,
     });
 
     createBookingInput.roomBookings.forEach(async (roomBooking) => {
