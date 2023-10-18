@@ -7,6 +7,8 @@ import { RoomBookingService } from './roombookings.service';
 import { BookingLog, BookingLogSchema } from './schemas/booking-log.schema';
 import { Booking, BookingSchema } from './schemas/booking.schema';
 import { RoomBooking, RoomBookingSchema } from './schemas/roombooking.schema';
+import { BookingLogResolver } from './booking-log.resolver';
+import { BookingLogService } from './booking-log.service';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -20,6 +22,8 @@ import { RoomBooking, RoomBookingSchema } from './schemas/roombooking.schema';
     RoomBookingsResolver,
     BookingsService,
     RoomBookingService,
+    BookingLogResolver,
+    BookingLogService,
   ],
   exports: [BookingsService],
 })

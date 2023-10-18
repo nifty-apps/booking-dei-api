@@ -45,11 +45,4 @@ export class ContactsResolver {
       updateContactInput,
     );
   }
-
-  @Mutation(() => Contact, {
-    name: 'removeContact',
-  })
-  removeContact(@Args('id', { type: () => ID }) id: Types.ObjectId) {
-    return this.contactsService.remove(id);
-  }
 }

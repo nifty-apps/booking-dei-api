@@ -10,3 +10,6 @@ export class CreateBookingLogInput extends OmitType(
 
 @InputType()
 export class UpdateBookingInput extends PartialType(BookingLog, InputType) {}
+
+@InputType()
+export class BookingLogFilter extends PartialType(BookingLog, InputType) {}

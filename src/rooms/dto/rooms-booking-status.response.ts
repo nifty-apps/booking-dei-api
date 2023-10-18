@@ -24,6 +24,8 @@ export class RoomBookingDetails extends PickType(RoomBooking, [
   bookingRent?: number;
   @Field({ nullable: true })
   bookingDue?: number;
+  @Field({ nullable: true })
+  paymentStatus?: string;
 }
 
 @ObjectType()

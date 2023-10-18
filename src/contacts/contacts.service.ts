@@ -66,8 +66,4 @@ export class ContactsService {
       new: true,
     });
   }
-
-  remove(id: Types.ObjectId) {
-    return this.contactModel.findByIdAndRemove(id);
-  }
 }

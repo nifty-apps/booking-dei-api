@@ -4,7 +4,6 @@ import {
   IsDate,
   IsEnum,
   IsMongoId,
-  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';

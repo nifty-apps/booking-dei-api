@@ -34,5 +34,6 @@ import { UsersModule } from './users/users.module';
     TransactionsModule,
     AuthModule,
   ],
+  providers: [],
 })
 export class AppModule {}

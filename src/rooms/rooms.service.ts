@@ -51,50 +51,33 @@ export class RoomsService {
             {
               $lookup: {
                 from: 'bookings',
-                let: { bookingId: '$booking' },
-                pipeline: [
-                  {
-                    $match: {
-                      $expr: {
-                        $eq: ['$_id', '$$bookingId'],
-                      },
-                    },
-                  },
-                  {
-                    $lookup: {
-                      from: 'contacts',
-                      localField: 'customer',
-                      foreignField: '_id',
-                      as: 'customerInfo',
-                    },
-                  },
-                  {
-                    $unwind: '$customerInfo',
-                  },
-                  {
-                    $project: {
-                      customerName: '$customerInfo.name',
-                    },
-                  },
-                ],
-                as: 'customer',
+                localField: 'booking',
+                foreignField: '_id',
+                as: 'booking',
               },
             },
             {
-              $addFields: {
-                bookingCustomer: {
-                  $ifNull: [
-                    {
-                      $arrayElemAt: ['$customer.customerName', 0],
-                    },
-                    null,
-                  ],
-                },
+              $lookup: {
+                from: 'contacts',
+                localField: 'booking.customer',
+                foreignField: '_id',
+                as: 'customerInfo',
               },
+            },
+            {
+              $unwind: '$booking',
+            },
+            {
+              $unwind: '$customerInfo',
             },
             {
               $project: {
-                customer: 0,
+                bookingCustomer: '$customerInfo.name',
+                booking: '$booking._id',
+                paymentStatus: '$booking.paymentStatus',
+                checkIn: 1,
+                checkOut: 1,
+                status: 1,
               },
             },
             {
@@ -119,13 +102,11 @@ export class RoomsService {
       },
       {
         $project: {
-          'type._id': 0,
-          'type.hotel': 0,
-          'roombookings.room': 0,
-          'roombookings.hotel': 0,
-          'roombookings.createdAt': 0,
-          'roombookings.updatedAt': 0,
-          'roombookings.__v': 0,
+          number: 1,
+          floor: 1,
+          position: 1,
+          type: 1,
+          roombookings: 1,
         },
       },
       {
