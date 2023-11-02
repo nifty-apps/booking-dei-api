@@ -7,7 +7,7 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsEnum, IsMongoId } from 'class-validator';
+import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 import { Contact } from 'src/contacts/schemas/contact.schema';
 import { Hotel } from 'src/hotels/schemas/hotel.schemas';
@@ -34,6 +34,7 @@ class Guest {
 
   @Field({ nullable: true, description: 'Phone number of the guest' })
   @Prop()
+  @IsOptional()
   phone?: string;
 }
 
@@ -62,6 +63,7 @@ export class Booking {
     description: 'Guests for the booking',
   })
   @Prop()
+  @IsOptional()
   guests?: Guest[];
 
   @Field(() => ID, { description: 'Hotel where the booking were generated' })

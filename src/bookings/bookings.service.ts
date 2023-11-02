@@ -34,6 +34,7 @@ export class BookingsService {
       hotel: createBookingInput.hotel,
       paymentStatus: createBookingInput.paymentStatus,
       number: bookingNumber,
+      guests: createBookingInput.guests,
     });
 
     createBookingInput.roomBookings.forEach(async (roomBooking) => {

@@ -88,7 +88,8 @@ export class Contact {
   @Field({ nullable: true, description: 'Date of deactivation' })
   @Prop({ default: null })
   @IsDate()
-  detactivatedAt: Date;
+  @IsOptional()
+  detactivatedAt?: Date;
 }
 
 export type ContactDocument = HydratedDocument<Contact>;
