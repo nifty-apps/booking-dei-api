@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateHotelInput } from './dto/create-hotel.input';
-import { UpdateHotelInput } from './dto/update-hotel.input';
+import { Model, Types } from 'mongoose';
+import { CreateHotelInput, UpdateHotelInput } from './dto/hotel.input';
 import { Hotel, HotelDocument } from './schemas/hotel.schemas';
 
 @Injectable()
@@ -18,12 +17,14 @@ export class HotelsService {
     return this.hotelModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} hotel`;
+  findOne(id: Types.ObjectId) {
+    return this.hotelModel.findById(id);
   }
 
-  update(id: number, updateHotelInput: UpdateHotelInput) {
-    return `This action updates a #${id} hotel`;
+  async update(id: Types.ObjectId, updateHotelInput: UpdateHotelInput) {
+    return this.hotelModel.findByIdAndUpdate(id, updateHotelInput, {
+      new: true,
+    });
   }
 
   remove(id: number) {

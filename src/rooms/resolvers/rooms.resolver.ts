@@ -7,15 +7,15 @@ import {
   CreateRoomInput,
   RoomFilterInput,
   UpdateRoomInput,
-} from './dto/room.input';
+} from '../dto/room.input';
 import {
   RoomBookingsOverview,
   RoomsByFloorResponse,
-} from './dto/rooms-booking-status.response';
-import { RoomsService } from './rooms.service';
-import { RoomTypesService } from './roomtypes.service';
-import { Room } from './schemas/room.schema';
-import { RoomType } from './schemas/roomtype.schema';
+} from '../dto/rooms-booking-status.response';
+import { Room } from '../schemas/room.schema';
+import { RoomType } from '../schemas/roomtype.schema';
+import { RoomTypesService } from '../services/room-types.service';
+import { RoomsService } from '../services/rooms.service';
 
 @Resolver(() => Room)
 @UseGuards(JwtAuthGuard)
@@ -78,12 +78,5 @@ export class RoomsResolver {
   @Mutation(() => Room)
   async updateRoom(@Args('updateRoomInput') updateRoomInput: UpdateRoomInput) {
     return this.roomsService.update(updateRoomInput._id, updateRoomInput);
-  }
-
-  @Mutation(() => Room)
-  removeRoom(
-    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: Types.ObjectId,
-  ) {
-    return this.roomsService.remove(id);
   }
 }

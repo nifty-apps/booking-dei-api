@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { CreateHotelInput } from './dto/create-hotel.input';
-import { UpdateHotelInput } from './dto/update-hotel.input';
+import { CreateHotelInput, UpdateHotelInput } from './dto/hotel.input';
 import { HotelsService } from './hotels.service';
 import { Hotel } from './schemas/hotel.schemas';
 
@@ -22,13 +22,13 @@ export class HotelsResolver {
   }
 
   @Query(() => Hotel, { name: 'hotel' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.hotelsService.findOne(id);
   }
 
   @Mutation(() => Hotel)
   updateHotel(@Args('updateHotelInput') updateHotelInput: UpdateHotelInput) {
-    return this.hotelsService.update(updateHotelInput.id, updateHotelInput);
+    return this.hotelsService.update(updateHotelInput._id, updateHotelInput);
   }
 
   @Mutation(() => Hotel)

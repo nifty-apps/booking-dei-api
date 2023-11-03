@@ -1,12 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, ObjectId } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 @ObjectType()
 @Schema({ timestamps: true })
 export class Hotel {
   @Field(() => ID, { description: 'Unique identifier of the hotel' })
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
   @Field(() => String, { description: 'Name of the hotel' })
   @Prop({ required: true })

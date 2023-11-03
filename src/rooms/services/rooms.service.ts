@@ -5,8 +5,8 @@ import {
   CreateRoomInput,
   RoomFilterInput,
   UpdateRoomInput,
-} from './dto/room.input';
-import { Room, RoomDocument } from './schemas/room.schema';
+} from '../dto/room.input';
+import { Room, RoomDocument } from '../schemas/room.schema';
 
 @Injectable()
 export class RoomsService {
@@ -366,9 +366,5 @@ export class RoomsService {
       { new: true },
     );
     return updatedRoom;
-  }
-
-  remove(id: Types.ObjectId) {
-    return this.roomModel.findByIdAndDelete(id);
   }
 }

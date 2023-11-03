@@ -1,10 +1,13 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ParseObjectIdPipe } from 'src/common/pipes/parse-object-id.pipe';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
+import {
+  CreateUserInput,
+  UpdateUserInput,
+  UserFilterInput,
+} from './dto/user.input';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
@@ -19,27 +22,19 @@ export class UsersResolver {
   }
 
   @Query(() => [User], { name: 'users' })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Args('filter') filter: UserFilterInput) {
+    return this.usersService.findAll(filter);
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: ObjectId) {
+  findOne(
+    @Args('id', { type: () => ID }, ParseObjectIdPipe) id: Types.ObjectId,
+  ) {
     return this.usersService.findOne({ _id: id });
   }
 
   @Mutation(() => User, { name: 'updateUser' })
-  updateUser(
-    @Args('id', { type: () => ID }) id: ObjectId,
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
-  ) {
-    return this.usersService.update(id, updateUserInput);
-  }
-
-  @Mutation(() => User, {
-    name: 'removeUser',
-  })
-  removeUser(@Args('id', { type: () => ID }) id: ObjectId) {
-    return this.usersService.remove(id);
+  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+    return this.usersService.update(updateUserInput._id, updateUserInput);
   }
 }

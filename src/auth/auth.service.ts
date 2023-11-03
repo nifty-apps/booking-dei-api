@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ObjectId } from 'mongoose';
-import { UserDocument } from 'src/users/schemas/user.schema';
+import { Types } from 'mongoose';
+import { UserDocument, UserType } from 'src/users/schemas/user.schema';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(_id: ObjectId): Promise<UserDocument> {
+  async validateUser(_id: Types.ObjectId): Promise<UserDocument> {
     return this.usersService.findOne({ _id });
   }
 
@@ -32,5 +32,25 @@ export class AuthService {
         user: userData,
       };
     }
+  }
+
+  async signup(name: string, phone: string, password: string) {
+    const existingPhone = await this.usersService.findAll({ phone });
+    // if existingPhone is empty array, throw an error
+    if (existingPhone.length) {
+      throw new UnauthorizedException('Phone number already exists');
+    }
+    const hotels = [];
+    const type = UserType.ADMIN;
+
+    const user = await this.usersService.create({
+      name,
+      hotels,
+      type,
+      phone,
+      password,
+    });
+
+    return user;
   }
 }
