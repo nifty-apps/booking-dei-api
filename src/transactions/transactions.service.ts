@@ -55,6 +55,34 @@ export class TransactionsService {
       filter['date'] = { $lte: transactionfilter.endDate };
     }
 
+    if (transactionfilter.contact) {
+      filter['contact'] = transactionfilter.contact;
+    }
+
+    if (transactionfilter.booking) {
+      filter['booking'] = transactionfilter.booking;
+    }
+
+    if (transactionfilter.hotel) {
+      filter['hotel'] = transactionfilter.hotel;
+    }
+
+    if (transactionfilter.user) {
+      filter['user'] = transactionfilter.user;
+    }
+
+    if (transactionfilter.category) {
+      filter['category'] = transactionfilter.category;
+    }
+
+    if (transactionfilter.subCategory) {
+      filter['subCategory'] = transactionfilter.subCategory;
+    }
+
+    if (transactionfilter.method) {
+      filter['method'] = transactionfilter.method;
+    }
+
     return this.transactionModel.find(filter);
   }
 

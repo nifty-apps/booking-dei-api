@@ -74,19 +74,21 @@ export class TransactionsResolver {
     return this.transactionsService.update(updateTransactionInput);
   }
 
+  //TODO: remove this query by using filter query
   @Mutation(() => Transaction, {
     name: 'removeTransaction',
   })
   removeTransaction(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.transactionsService.remove(id);
   }
-
+  //TODO: remove this query by using filter query
   @Mutation(() => Transaction, {
     name: 'softDeleteTransaction',
   })
   softDeleteTransaction(@Args('id', { type: () => ID }) id: Types.ObjectId) {
     return this.transactionsService.softDelete(id);
   }
+  //TODO: remove this query by using filter query
 
   @Query(() => [Transaction], {
     name: 'transactionsByDateRange',
