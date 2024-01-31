@@ -1,11 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 import { CleaningStatus, MaintenanceStatus } from '../constants/enums';
-import { Field, ID } from '@nestjs/graphql';
-import { IsDate, IsEnum, IsMongoId, IsOptional } from 'class-validator';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import {
+  IsDate,
+  IsEnum,
+  IsMongoId,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export type MaintenanceDocument = HydratedDocument<Maintenance>;
 
+@ObjectType()
 @Schema({ timestamps: true })
 export class Maintenance {
   @Field(() => ID, { description: 'Unique identifier for Maintenance record' })
@@ -61,6 +70,10 @@ export class Maintenance {
   })
   issuedAt: Date;
 
+  /*****************/
+  /*  R e v i e w  */
+  /*****************/
+
   @Field(() => ID, {
     description: 'The user who examined the room for maintenance',
     nullable: true,
@@ -85,6 +98,10 @@ export class Maintenance {
   })
   reviewedAt?: Date;
 
+  /***************************/
+  /*  M a i n t e n a n c e  */
+  /***************************/
+
   @Field(() => MaintenanceStatus, {
     description: 'Current maintenance status',
   })
@@ -95,6 +112,20 @@ export class Maintenance {
     default: MaintenanceStatus.NONE,
   })
   maintenanceStatus: MaintenanceStatus;
+
+  @Field({
+    description: 'Remarks given by reviewer for maintenance',
+  })
+  @IsString()
+  @MinLength(3)
+  @MaxLength(255)
+  @Prop({
+    type: String,
+    trim: true,
+    minLength: 3,
+    maxLength: 255,
+  })
+  maintenanceRemark?: string;
 
   @Field(() => ID, {
     description: 'The user who resolved the maintenance issue',
@@ -119,6 +150,10 @@ export class Maintenance {
     index: true,
   })
   resolvedAt?: Date;
+
+  /*********************/
+  /*  C l e a n i n g  */
+  /*********************/
 
   @Field(() => CleaningStatus, {
     description: 'Current cleaning status of the room',
