@@ -47,18 +47,33 @@ export class RoomBookingService {
     });
   }
 
-  update(id: Types.ObjectId, updateRoomBookingInput: UpdateRoomBookingInput) {
-    const roomBookingUpdate = this.roomBookingModel.findByIdAndUpdate(
-      id,
-      updateRoomBookingInput,
-      {
-        new: true,
-      },
+  async update(
+    id: Types.ObjectId,
+    updateRoomBookingInput: UpdateRoomBookingInput,
+  ) {
+    const roomBooking = await this.roomBookingModel.findById(
+      updateRoomBookingInput._id,
     );
-    if (!roomBookingUpdate) {
-      throw new BadRequestException('Room Booking not found');
+
+    const checkoutAtBeforeUpdate = roomBooking.checkOut;
+    roomBooking.set(updateRoomBookingInput);
+    await roomBooking.save();
+
+    if (!checkoutAtBeforeUpdate && updateRoomBookingInput.checkOut) {
+      console.log('Trigger room maintenance assessment');
     }
-    return roomBookingUpdate;
+
+    // const roomBookingUpdate = this.roomBookingModel.findByIdAndUpdate(
+    //   id,
+    //   updateRoomBookingInput,
+    //   {
+    //     new: true,
+    //   },
+    // );
+    // if (!roomBookingUpdate) {
+    //   throw new BadRequestException('Room Booking not found');
+    // }
+    return roomBooking;
   }
 
   remove(id: Types.ObjectId) {

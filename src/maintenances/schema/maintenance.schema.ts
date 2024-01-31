@@ -17,7 +17,10 @@ export type MaintenanceDocument = HydratedDocument<Maintenance>;
 @ObjectType()
 @Schema({ timestamps: true })
 export class Maintenance {
-  @Field(() => ID, { description: 'Unique identifier for Maintenance record' })
+  @Field(() => ID, {
+    description: 'Unique identifier for Maintenance and assessment record',
+  })
+  @IsMongoId()
   _id: Types.ObjectId;
 
   @Field(() => ID, {

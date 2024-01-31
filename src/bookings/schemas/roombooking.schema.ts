@@ -47,9 +47,10 @@ export class RoomBooking {
   @IsDate()
   checkIn: Date;
 
-  @Field({ description: 'Check-out date of the Room booking' })
-  @Prop({ required: true })
+  @Field({ nullable: true, description: 'Check-out date of the Room booking' })
+  @Prop({ required: false })
   @IsDate()
+  @IsOptional()
   checkOut: Date;
 
   @Field({ description: 'Room rent for the booking', nullable: true })
