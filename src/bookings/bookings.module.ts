@@ -9,8 +9,10 @@ import { Booking, BookingSchema } from './schemas/booking.schema';
 import { RoomBooking, RoomBookingSchema } from './schemas/roombooking.schema';
 import { BookingLogResolver } from './booking-log.resolver';
 import { BookingLogService } from './booking-log.service';
+import { MaintenancesModule } from 'src/maintenances';
 @Module({
   imports: [
+    MaintenancesModule,
     MongooseModule.forFeature([
       { name: Booking.name, schema: BookingSchema },
       { name: RoomBooking.name, schema: RoomBookingSchema },

@@ -7,12 +7,14 @@ import {
   UpdateRoomBookingInput,
 } from './dto/roombooking.input';
 import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
+import { MaintenancesService } from 'src/maintenances';
 
 @Injectable()
 export class RoomBookingService {
   constructor(
     @InjectModel(RoomBooking.name)
     private roomBookingModel: Model<RoomBookingDocument>,
+    private readonly maintenanceService: MaintenancesService,
   ) {}
 
   async create(createRoomBookingInput: CreateRoomBookingInput) {
@@ -59,8 +61,17 @@ export class RoomBookingService {
     roomBooking.set(updateRoomBookingInput);
     await roomBooking.save();
 
+    // Pre checkout room assessment
     if (!checkoutAtBeforeUpdate && updateRoomBookingInput.checkOut) {
-      console.log('Trigger room maintenance assessment');
+      // TODO: This condition is a temporary solution as my assignment
+      // is a related.
+      // But this shows how the maintenance service will be notified about checkout event
+      await this.maintenanceService.notifyCheckout({
+        booking: roomBooking.booking,
+        hotel: roomBooking.hotel,
+        room: roomBooking.room,
+        checkoutAt: roomBooking.checkOut,
+      });
     }
 
     // const roomBookingUpdate = this.roomBookingModel.findByIdAndUpdate(
