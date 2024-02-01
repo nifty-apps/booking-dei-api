@@ -14,7 +14,11 @@ export class CreateRoomBookingInput extends OmitType(
 export class UpdateRoomBookingInput extends PartialType(
   RoomBooking,
   InputType,
-) {}
+) {
+  @Field(() => ID, { nullable: false })
+  @IsMongoId()
+  _id: Types.ObjectId;
+}
 
 @InputType()
 export class RoomBookingFilter extends PartialType(RoomBooking, InputType) {

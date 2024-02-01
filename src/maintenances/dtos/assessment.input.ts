@@ -1,55 +1,65 @@
-import { Field, InputType, PickType } from '@nestjs/graphql';
+import { Field, ID, InputType, PartialType, PickType } from '@nestjs/graphql';
 import { Maintenance } from '../schema';
 import { CleaningStatus, MaintenanceStatus } from '../constants';
-import { IsIn } from 'class-validator';
+import { IsIn, IsMongoId } from 'class-validator';
+import { Types } from 'mongoose';
+
+@InputType()
+export class AssessmentIdentifier extends PickType(
+  Maintenance,
+  ['_id', 'hotel'],
+  InputType,
+) {}
+
+@InputType()
+export class AssessmentFilter extends PartialType(Maintenance, InputType) {}
 
 /* Will be used by admin */
 @InputType()
-export class UpdateAssessment extends PickType(Maintenance, [
-  '_id',
+export class UpdateAssessmentInput extends PartialType(
+  PickType(
+    Maintenance,
+    [
+      'reviewedBy',
+      'reviewedAt',
 
-  'reviewedBy',
-  'reviewedAt',
+      'maintenanceRemark',
+      'maintenanceStatus',
+      'resolvedBy',
+      'resolvedAt',
 
-  'maintenanceRemark',
-  'maintenanceStatus',
-  'resolvedBy',
-  'resolvedAt',
+      'cleaningStatus',
+      'cleanedAt',
+      'cleanedBy',
+    ],
+    InputType,
+  ),
+) {
+  @Field(() => ID)
+  @IsMongoId()
+  _id: Types.ObjectId;
 
-  'cleaningStatus',
-  'cleanedAt',
-  'cleanedBy',
-]) {}
+  @Field(() => ID)
+  @IsMongoId()
+  hotel: Types.ObjectId;
+}
 
 /* Will be used by house keeper (staff) */
 @InputType()
-export class ReviewAssessment extends PickType(Maintenance, [
-  '_id',
-  'reviewedBy',
-  'reviewedAt',
-  'maintenanceRemark',
-]) {
+export class ReviewAssessmentInput extends PickType(
+  Maintenance,
+  ['_id', 'hotel', 'maintenanceRemark'],
+  InputType,
+) {
   @Field(() => MaintenanceStatus, {
     description: 'Maintenance Status of the room',
   })
   @IsIn([MaintenanceStatus.NONE, MaintenanceStatus.REQUIRED])
   maintenanceStatus: MaintenanceStatus;
 
-  @Field(() => MaintenanceStatus, {
+  @Field(() => CleaningStatus, {
     description: 'Cleaning status of the room',
   })
   @IsIn([CleaningStatus.NONE, CleaningStatus.REQUIRED])
-  cleaningStatus: MaintenanceStatus;
+  cleaningStatus: CleaningStatus;
 }
-
-// Used by house keeper (staff) only
-@InputType()
-export class ResolveMaintenanceIssueInput extends PickType(Maintenance, [
-  '_id',
-]) {}
-
-// Used by house keeper (staff) only
-@InputType()
-export class CompleteCleaningAssignmentInput extends PickType(Maintenance, [
-  '_id',
-]) {}

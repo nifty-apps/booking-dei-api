@@ -67,7 +67,7 @@ export class Maintenance {
   @IsDate()
   @Prop({
     required: true,
-    default: () => Date.now(),
+    default: () => new Date(),
     immutable: true,
     index: true,
   })
@@ -118,9 +118,11 @@ export class Maintenance {
 
   @Field({
     description: 'Remarks given by reviewer for maintenance',
+    nullable: true,
   })
   @IsString()
   @MinLength(3)
+  @IsOptional()
   @MaxLength(255)
   @Prop({
     type: String,
@@ -169,7 +171,7 @@ export class Maintenance {
   })
   cleaningStatus: CleaningStatus;
 
-  @Field(() => ID, {
+  @Field(() => Date, {
     description: 'The time when the room is cleaned',
     nullable: true,
   })
