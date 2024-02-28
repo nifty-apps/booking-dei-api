@@ -360,6 +360,15 @@ export class RoomsService {
   }
 
   async update(id: Types.ObjectId, updateRoomInput: UpdateRoomInput) {
+    /*
+
+		4. Maintenance Status Update Interface
+    Housekeeping staff should have access to a user-friendly interface to update the maintenance status of a room.
+    This interface should be simple and efficient to use, allowing for quick status updates.
+
+		ans: in this api use can update room maintenance review status
+		*/
+
     const updatedRoom = await this.roomModel.findByIdAndUpdate(
       id,
       { $set: updateRoomInput },

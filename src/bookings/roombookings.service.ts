@@ -6,7 +6,11 @@ import {
   RoomBookingFilter,
   UpdateRoomBookingInput,
 } from './dto/roombooking.input';
-import { RoomBooking, RoomBookingDocument } from './schemas/roombooking.schema';
+import {
+  RoomBooking,
+  RoomBookingDocument,
+  RoomBookingStatus,
+} from './schemas/roombooking.schema';
 
 @Injectable()
 export class RoomBookingService {
@@ -47,7 +51,40 @@ export class RoomBookingService {
     });
   }
 
-  update(id: Types.ObjectId, updateRoomBookingInput: UpdateRoomBookingInput) {
+  async update(
+    id: Types.ObjectId,
+    updateRoomBookingInput: UpdateRoomBookingInput,
+  ) {
+    // const roomBookingUpdate = this.roomBookingModel.findByIdAndUpdate(
+    //   id,
+    //   updateRoomBookingInput,
+    //   {
+    //     new: true,
+    //   },
+    // );
+    // if (!roomBookingUpdate) {
+    //   throw new BadRequestException('Room Booking not found');
+    // }
+
+    /*
+		
+		3. Check-In Constraints
+The system should prevent check-in for rooms marked with a maintenance status of true due to special circumstances. Standard cleaning processes should not affect room availability for check-in.
+		
+		*/
+
+    const roomBooking: any = await this.roomBookingModel.findById(id, {
+      populate: 'room',
+    });
+
+    if (
+      !roomBooking ||
+      (roomBooking?.room?.maintenanceReviewStatus &&
+        updateRoomBookingInput.status === RoomBookingStatus.CHECKEDIN)
+    ) {
+      throw new BadRequestException('Room Booking not found');
+    }
+
     const roomBookingUpdate = this.roomBookingModel.findByIdAndUpdate(
       id,
       updateRoomBookingInput,
@@ -55,6 +92,7 @@ export class RoomBookingService {
         new: true,
       },
     );
+
     if (!roomBookingUpdate) {
       throw new BadRequestException('Room Booking not found');
     }
