@@ -1,8 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsDate, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 import { RoomType } from './roomtype.schema';
-import { IsDate, IsMongoId, IsOptional, IsString } from 'class-validator';
 
 @ObjectType()
 @Schema({ timestamps: true })
@@ -42,6 +42,15 @@ export class Room {
   @IsDate()
   @IsOptional()
   detactivatedAt?: Date;
+
+  /* 
+		1. Guest Checkout Trigger
+	Upon guest checkout, the system should mark the room for a maintenance review. This does not automatically imply a need for maintenance but indicates a need for housekeeping assessment.
+	*/
+  @Field({ description: 'Maintenance Review Status' })
+  @Prop({ default: false })
+  @IsOptional()
+  maintenanceReviewStatus: boolean;
 }
 
 export type RoomDocument = HydratedDocument<Room>;
